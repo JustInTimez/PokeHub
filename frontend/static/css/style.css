@@ -2,3 +2,21 @@
     margin: 0;
     box-sizing: border-box;
 }
+
+.jumbotron {
+    color: white;
+    background-image: url("../images/pika-jumbo1.jpg");
+    background-color: #fbcd3c;
+    background-position: center;
+    background-size: cover;
+    height: 500px;
+    animation: fadeIn 2s ease;
+    -webkit-animation: fadeIn 2s ease;
+    -moz-animation: fadeIn 2s ease;
+    -o-animation: fadeIn 2s ease;
+    -ms-animation: fadeIn 2s ease;
+  }
+
+.dropdown-item {
+    color: white;
+}

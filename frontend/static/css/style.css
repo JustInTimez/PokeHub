@@ -16,3 +16,7 @@
     -o-animation: fadeIn 2s ease;
     -ms-animation: fadeIn 2s ease;
   }
+
+.dropdown-item {
+    color: white;
+}

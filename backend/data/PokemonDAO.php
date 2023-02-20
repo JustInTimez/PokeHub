@@ -6,7 +6,8 @@ use config\DatabaseConfig;
 use model\Pokemon;
 
 
-class PokemonDAO {
+class PokemonDAO
+{
 
     // =================================== Fields =================================== //
 
@@ -14,7 +15,8 @@ class PokemonDAO {
 
     // =================================== Constructor ============================== //
 
-    public function __construct($databaseConfig) {
+    public function __construct($databaseConfig)
+    {
         $this->databaseConfig = $databaseConfig;
     }
 
@@ -32,7 +34,8 @@ class PokemonDAO {
 
     // ===================================== READ ALL ================================ //
 
-    public function readAllPkm() {
+    public function readAllPkm()
+    {
 
         $conn = $this->databaseConfig->connect();
 
@@ -47,8 +50,10 @@ class PokemonDAO {
                 array_push($pokemonFromDB, $pokemon);
             }
 
-
-
-        };
+            return $pokemonFromDB;
+            $conn->close();
+        } else {
+            die("Unable to connect: " . $conn->error);
+        }
     }
 }

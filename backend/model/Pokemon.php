@@ -1,6 +1,6 @@
 <?php
 
-namespace PokemonModel;
+namespace Model;
 
 class Pokemon implements \JsonSerializable {
 
@@ -54,8 +54,12 @@ class Pokemon implements \JsonSerializable {
     // converts stdObject to Model class Object
     public static function readPkmFromDB($Object) {
 
-        $pokemon = new Pokemon($Object->id, $Object->attack);
-        // $pokemon->setStudentNo($Object->student_no);
+        $pokemon = new Pokemon(
+            $Object->id, $Object->attack, $Object->base_egg_steps, 
+            $Object->classification, $Object->defense, $Object->height_m, $Object->hp, 
+            $Object->name, $Object->pokedex_number, $Object->sp_attack, $Object->sp_defense, 
+            $Object->speed, $Object->type1, $Object->type2, $Object->weight__kg, $Object->is_legendary);
+            // $pokemon->setStudentNo($Object->student_no);  Not needed - not setting any Pokemon.
         return $pokemon;
 
     }

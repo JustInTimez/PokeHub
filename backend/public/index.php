@@ -15,19 +15,45 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 
+// ---- App requires ----
+use Model\Pokemon;
+use Data\PokemonDAO;
+use Config\DatabaseConfig;
+
 require __DIR__ . '/../vendor/autoload.php';
 
 $app = AppFactory::create();
 
 $app->setBasePath("/public"); // Set the base path to reach index.php
 
-$app->addRoutingMiddleware();
+// $app->addRoutingMiddleware();
 
 $errorMiddleware = $app->addErrorMiddleware(true, true, true);
 
 $app->get('/', function (Request $request, Response $response, $args) {
     $response->getBody()->write("Hello world! I'm working");
     return $response;
+});
+
+
+
+// ====== READ ======
+$app->get('/model', function (Request $request, Response $response, $args) {
+    
+
+});
+
+
+
+
+
+
+
+
+// ====== RETURN 404 IF NOT ONE OF THE FOLLOWING: ======
+$app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function($req, $res) {
+    $handler = $this->notFoundHandler; // handle using the default Slim page not found handler
+    return $handler($req, $res);
 });
 
 $app->run();

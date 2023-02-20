@@ -2,8 +2,8 @@
 
 namespace PkmData;
 
-use config\DatabaseConfig;
-use model\Pokemon;
+use Config\DatabaseConfig;
+use Model\Pokemon;
 
 
 class PokemonDAO
@@ -19,11 +19,6 @@ class PokemonDAO
     {
         $this->databaseConfig = $databaseConfig;
     }
-
-
-
-
-
 
 
     // ====================================== CREATE ================================ //
@@ -46,7 +41,7 @@ class PokemonDAO
         if ($result = $conn->query($stmt)) {
 
             while ($row = $result->fetch_object()) {
-                $pokemon = Pokemon::readPkmFromDB($row);     // Will throw error until I create the Pokemon model data
+                $pokemon = Pokemon::readPkmFromDB($row);
                 array_push($pokemonFromDB, $pokemon);
             }
 

@@ -16,16 +16,18 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 
+require __DIR__ . '/../vendor/autoload.php';
+
 // ---- App requires ----
 use Model\Pokemon;
 use PkmData\PokemonDAO;
 use Config\DatabaseConfig;
 
-require __DIR__ . '/../vendor/autoload.php';
+
 
 $app = AppFactory::create();
 
-$app->setBasePath("/public"); // Set the base path to reach index.php
+// $app->setBasePath("/public"); // Set the base path to reach index.php
 
 // $app->addRoutingMiddleware();
 

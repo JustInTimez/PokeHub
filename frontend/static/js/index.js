@@ -1,4 +1,4 @@
-axios.get('/all-pokemon').then(function(response) {
+axios.get('/api/all-pokemon').then(function(response) {
     // This is for success
     console.log(response.data);
 }).catch(function (error) {

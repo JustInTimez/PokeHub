@@ -1,5 +1,6 @@
 <?php
 
+
 // Error Reporting
 
 ini_set('display_errors', 1);
@@ -17,7 +18,7 @@ use Slim\Factory\AppFactory;
 
 // ---- App requires ----
 use Model\Pokemon;
-use Data\PokemonDAO;
+use PkmData\PokemonDAO;
 use Config\DatabaseConfig;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -38,16 +39,20 @@ $app->get('/', function (Request $request, Response $response, $args) {
 
 
 // ====== READ ======
-$app->get('/model', function (Request $request, Response $response, $args) {
+$app->get('/api/all-pokemon', function (Request $request, Response $response, $args) {
     
+    // Dependencies
+    $DatabaseConfig = new DatabaseConfig();
+    $PokemonData = new PokemonDAO($DatabaseConfig);
+
+    // Get Pokemon data & convert to JSON
+    $pokemon = $PokemonData->readAllPkm();
+    $responseData = json_encode($pokemon);
+
+    // Write JSON data to response object & assign type JSON
+    return $response->withHeader('Content-Type', 'application/json')->getBody()->write($responseData);
 
 });
-
-
-
-
-
-
 
 
 // ====== RETURN 404 IF NOT ONE OF THE FOLLOWING: ======

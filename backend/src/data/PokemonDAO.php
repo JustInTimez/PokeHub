@@ -1,6 +1,6 @@
 <?php
 
-namespace PkmData;
+namespace Data;
 
 use Config\DatabaseConfig;
 use Model\Pokemon;

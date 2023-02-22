@@ -16,11 +16,11 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '../../vendor/autoload.php';
 
 // ---- App requires ----
 use Model\Pokemon;
-use PkmData\PokemonDAO;
+use Data\PokemonDAO;
 use Config\DatabaseConfig;
 
 
@@ -38,8 +38,6 @@ $app->get('/', function (Request $request, Response $response, $args) {
     return $response;
 });
 
-
-
 // ====== READ ======
 $app->get('/api/all-pokemon', function (Request $request, Response $response, $args) {
     
@@ -52,7 +50,12 @@ $app->get('/api/all-pokemon', function (Request $request, Response $response, $a
     $responseData = json_encode($pokemon);
 
     // Write JSON data to response object & assign type JSON
-    return $response->withHeader('Content-Type', 'application/json')->getBody()->write($responseData);
+    // return $response->withHeader('Content-Type', 'application/json')->getBody()->write($responseData);
+    
+    // Create new Response object with JSON data as the body
+    $newResponse = $response->withHeader('Content-Type', 'application/json');
+    $newResponse->getBody()->write($responseData);
+    return $newResponse;
 
 });
 

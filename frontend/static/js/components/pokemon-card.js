@@ -3,7 +3,7 @@ function createPokemonCard(pokemon) {
     card.classList.add("col");
     card.innerHTML = `
             <div class="card h-100">
-                <img src="${pokemon.image}" class="card-img-top" alt="${pokemon.name}">
+                <img src="${pokemon.img}" class="card-img-top card-img" alt="${pokemon.name}">
                 <div class="card-body">
                     <h5 class="card-title">${pokemon.name}</h5>
                     <p class="card-text">${pokemon.pokedex_number}</p>

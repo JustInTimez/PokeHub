@@ -23,12 +23,13 @@ class Pokemon implements \JsonSerializable {
     private $type2;
     private $weight_kg;
     private $is_legendary;
+    private $abilities = [];
     
     
 
     // ================================= Constructor ================================= //
 
-    public function __construct($id, $attack, $base_egg_steps, $classification, $defense, $height_m, $hp, $name, $pokedex_number, $sp_attack, $sp_defense, $speed, $type1, $type2, $weight_kg, $is_legendary) {
+    public function __construct($id, $attack, $base_egg_steps, $classification, $defense, $height_m, $hp, $name, $pokedex_number, $sp_attack, $sp_defense, $speed, $type1, $type2, $weight_kg, $is_legendary, $abilities) {
         $this->id = $id;
         $this->attack = $attack;
         $this->base_egg_steps = $base_egg_steps;
@@ -45,7 +46,24 @@ class Pokemon implements \JsonSerializable {
         $this->type2 = $type2;
         $this->weight_kg = $weight_kg;
         $this->is_legendary = $is_legendary;
+        // $this->abilities = $abilities;
+
+
+        // Decode abilities property if it's a JSON string
+       if (is_string($abilities)) {
+            $this->abilities = json_decode($abilities, true) ?: [];
+        } elseif (is_array($abilities)) {
+            $this->abilities = $abilities;
+        }
         
+        // if (isset($this->classification)) {
+        //     // Do something with the classification property
+        //     // echo $this->classification;
+        // } else {
+        //     // The classification property is not defined
+        //     echo 'Classification is not defined';
+        // }
+
     }
 
     // =================================== Methods =================================== //
@@ -54,18 +72,36 @@ class Pokemon implements \JsonSerializable {
     // converts stdObject to Model class Object
     public static function readPkmFromDB($Object) {
 
+        $abilities = $Object->abilities;
+        if (is_string($abilities)) {
+            $abilities = json_decode($abilities, true);
+        }
+
+        // var_dump($Object);
         $pokemon = new Pokemon(
             $Object->id, $Object->attack, $Object->base_egg_steps, 
             $Object->classification, $Object->defense, $Object->height_m, $Object->hp, 
             $Object->name, $Object->pokedex_number, $Object->sp_attack, $Object->sp_defense, 
-            $Object->speed, $Object->type1, $Object->type2, $Object->weight__kg, $Object->is_legendary);
+            $Object->speed, $Object->type1, $Object->type2, $Object->weight_kg, $Object->is_legendary, $abilities);
             // $pokemon->setStudentNo($Object->student_no);  Not needed - not setting any Pokemon.
         return $pokemon;
 
     }
 
+    public function checkClassification(): void {
+        if (isset($this->classification)) {
+            // Do something with the classification property
+            echo $this->classification;
+        } else {
+            // The classification property is not defined
+            echo 'Classification is not defined';
+        }
+    }
 
-    public function jsonSerialize() {
+    public function jsonSerialize(): mixed {
+
+        $abilities = json_encode($this->abilities);
+
         return [
             "id" => $this->id,
             "attack" => $this->attack,
@@ -82,7 +118,8 @@ class Pokemon implements \JsonSerializable {
             "type1" => $this->type1,
             "type2" => $this->type2,
             "weight_kg" => $this->weight_kg,
-            "is_legendary" => $this->is_legendary
+            "is_legendary" => $this->is_legendary,
+            "abilities" => $abilities
         ];
     }
 
@@ -406,6 +443,26 @@ class Pokemon implements \JsonSerializable {
     public function setIs_legendary($is_legendary)
     {
         $this->is_legendary = $is_legendary;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of abilities
+     */ 
+    public function getAbilities()
+    {
+        return $this->abilities;
+    }
+
+    /**
+     * Set the value of abilities
+     *
+     * @return  self
+     */ 
+    public function setAbilities($abilities)
+    {
+        $this->abilities = $abilities;
 
         return $this;
     }

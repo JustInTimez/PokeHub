@@ -6,7 +6,7 @@ function createPokemonCard(pokemon) {
                 <img src="${pokemon.img}" class="card-img-top card-img" alt="${pokemon.name}">
                 <div class="card-body">
                     <h5 class="card-title">${pokemon.name}</h5>
-                    <p class="card-text">${pokemon.pokedex_number}</p>
+                    <p class="card-text">DEX no:${pokemon.pokedex_number}</p>
                 </div>
                 <div class="card-footer">
                     <small class="text-muted">Type: ${pokemon.type1}</small>

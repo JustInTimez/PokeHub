@@ -52,6 +52,7 @@ class Pokemon implements \JsonSerializable {
         // Decode abilities property if it's a JSON string
        if (is_string($abilities)) {
             $this->abilities = json_decode($abilities, true) ?: [];
+            // var_dump($this->abilities);
         } elseif (is_array($abilities)) {
             $this->abilities = $abilities;
         }
@@ -70,19 +71,13 @@ class Pokemon implements \JsonSerializable {
 
 
     // converts stdObject to Model class Object
-    public static function readPkmFromDB($Object) {
+    public static function readPkmFromDB($Object) {  
 
-        $abilities = $Object->abilities;
-        if (is_string($abilities)) {
-            $abilities = json_decode($abilities, true);
-        }
-
-        // var_dump($Object);
         $pokemon = new Pokemon(
             $Object->id, $Object->attack, $Object->base_egg_steps, 
             $Object->classification, $Object->defense, $Object->height_m, $Object->hp, 
             $Object->name, $Object->pokedex_number, $Object->sp_attack, $Object->sp_defense, 
-            $Object->speed, $Object->type1, $Object->type2, $Object->weight_kg, $Object->is_legendary, $abilities);
+            $Object->speed, $Object->type1, $Object->type2, $Object->weight_kg, $Object->is_legendary, $Object->abilities);
             // $pokemon->setStudentNo($Object->student_no);  Not needed - not setting any Pokemon.
         return $pokemon;
 
@@ -119,7 +114,7 @@ class Pokemon implements \JsonSerializable {
             "type2" => $this->type2,
             "weight_kg" => $this->weight_kg,
             "is_legendary" => $this->is_legendary,
-            "abilities" => $abilities
+            "abilities" => $this->abilities
         ];
     }
 

@@ -1,4 +1,4 @@
-import { createPokemonCard } from '/components/pokemon-card.js';
+import { createPokemonCard } from './components/pokemon-card.js';
 
 document.addEventListener("DOMContentLoaded", function () {
   axios
@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       console.log(response.data);
       data.forEach((pokemon) => {
-        
+        // Use import function from pokemon-card
         let card = createPokemonCard(pokemon);
 
         pokemonList.appendChild(card);

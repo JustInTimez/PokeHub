@@ -17,6 +17,7 @@ class User {
     // ================================= Constructor ================================= //
 
     public function __construct($id, $fname, $lname, $email, $password, $contact_no) {
+        
         $this->id = $id;
         $this->fname = $fname;
         $this->lname = $lname;

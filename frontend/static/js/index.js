@@ -36,11 +36,11 @@ document.addEventListener("DOMContentLoaded", function () {
 // =================================== Collect and send user data to API endpoint for backend consumption =================================== //
 
 const form = document.querySelector("#login-register-form");
-
 const loginButton = document.querySelector(".btn-login");
 const registerButton = document.querySelector(".btn-register");
 
 loginButton.addEventListener("click", function () {
+
   const formData = new FormData(form);
   const data = JSON.stringify(Object.fromEntries(formData)); // convert FormData object to JSON string
   const passwordInput = document.querySelector("#password");

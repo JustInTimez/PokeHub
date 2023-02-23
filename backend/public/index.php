@@ -27,7 +27,9 @@ use Config\DatabaseConfig;
 
 $app = AppFactory::create();
 
+
 $errorMiddleware = $app->addErrorMiddleware(true, true, true);
+$app->addBodyParsingMiddleware();
 
 
 $app->get('/', function (Request $request, Response $response, $args) {
@@ -38,24 +40,24 @@ $app->get('/', function (Request $request, Response $response, $args) {
 // ====== CREATE ====== //
 
 $app->post('/api/register', function (Request $request, Response $response, $args) {
-    
+
     // Dependencies
     $DatabaseConfig = new DatabaseConfig();
     $UserData = new UserDAO($DatabaseConfig);
 
     // Extract user data from request body
     $userData = $request->getParsedBody();
-    $user = new Model\User($userData['id'], $userData['fname'], $userData['lname'], $userData['email'], $userData['password'], $userData['contact_no']);
-    
-    if (!$userData) {
+
+    if (empty($userData)) {
         error_log('Error: User data not found in request body');
         $response = $response->withStatus(400);
         $response = $response->withHeader('Content-Type', 'application/json');
         $response->getBody()->write(json_encode(['error' => 'Invalid request body']));
         return $response;
     }
+
     // Add user to database
-    $UserData->addUser($user);
+    $UserData->addUser($userData['email'], $userData['password'] );
 
     // Create response
     $response = $response->withStatus(200);
@@ -109,9 +111,9 @@ $app->get('/api/login', function (Request $request, Response $response, $args) {
 
 
 // ====== RETURN 404 IF NOT ONE OF THE FOLLOWING: ======
-$app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function($req, $res) {
-    $handler = $this->notFoundHandler; // handle using the default Slim page not found handler
-    return $handler($req, $res);
-});
+// $app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function($req, $res) use ($app) {
+//     $handler = $this->notFoundHandler; // handle using the default Slim page not found handler
+//     return $handler($req, $res);
+// });
 
 $app->run();

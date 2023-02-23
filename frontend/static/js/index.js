@@ -28,16 +28,12 @@ document.addEventListener("DOMContentLoaded", function () {
   modal.style.display = "block";
 });
 
-
-
-
-
-
 // =================================== Collect and send user data to API endpoint for backend consumption =================================== //
 
 const form = document.querySelector("#login-register-form");
 const loginButton = document.querySelector(".btn-login");
 const registerButton = document.querySelector(".btn-register");
+const overlay = document.querySelector("#overlay");
 
 loginButton.addEventListener("click", function () {
 
@@ -58,6 +54,19 @@ loginButton.addEventListener("click", function () {
       },
     })
     .then(function (response) {
+
+      // Remove overlay
+      overlay.style.display = "none";
+
+      // Close the modal
+      const modal = document.querySelector('#login-modal');
+      modal.classList.remove('show');
+      modal.setAttribute('aria-hidden', 'true');
+      modal.setAttribute('style', 'display: none');
+
+      // Save user's logged-in state to LocalStorage
+      localStorage.setItem("isLoggedIn", true);
+
       console.log(response + "AWEEEEEEEEEEEEEEEE!");
     })
     .catch(function (error) {
@@ -66,7 +75,6 @@ loginButton.addEventListener("click", function () {
 });
 
 registerButton.addEventListener("click", function () {
-
   const emailInput = document.querySelector("#email");
   const emailRegex = /\S+@\S+\.\S+/;
   const passwordInput = document.querySelector("#password");
@@ -76,7 +84,7 @@ registerButton.addEventListener("click", function () {
     alert("Please enter a valid email address.");
     return;
   }
-  
+
   if (passwordInput.value.length < 8) {
     // Display an error message
     alert("Password must be at least 8 characters long.");
@@ -84,7 +92,7 @@ registerButton.addEventListener("click", function () {
   }
   const formData = new FormData(form);
   const data = JSON.stringify(Object.fromEntries(formData)); // convert FormData object to JSON string
-  
+
   axios
     .post("http://localhost/api/register", data, {
       headers: {

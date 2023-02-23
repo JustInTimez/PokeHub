@@ -26,8 +26,8 @@ class UserDAO {
         // Add user to the database
         $conn = $this->databaseConfig->connect();
     
-        $stmt = $conn->prepare("INSERT INTO trainers (fname, lname, email, password, contact_no) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssss", $user->getFname(), $user->getLname(), $user->getEmail(), $user->getPassword(), $user->getContact_no());
+        $stmt = $conn->prepare("INSERT INTO trainers (email, password) VALUES (?, ?)");
+        $stmt->bind_param("ss", $user->getEmail(), $user->getPassword());
     
         $stmt->execute();
         $stmt->close();

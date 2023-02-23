@@ -6,6 +6,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+
 // ---- CORS ----
 
 header("Access-Control-Allow-Origin: *");   // allow any origin to access resources on this API
@@ -28,6 +29,7 @@ $app = AppFactory::create();
 
 $errorMiddleware = $app->addErrorMiddleware(true, true, true);
 
+
 $app->get('/', function (Request $request, Response $response, $args) {
     $response->getBody()->write("Hello world! I'm working");
     return $response;
@@ -45,14 +47,21 @@ $app->post('/api/register', function (Request $request, Response $response, $arg
     $userData = $request->getParsedBody();
     $user = new Model\User($userData['id'], $userData['fname'], $userData['lname'], $userData['email'], $userData['password'], $userData['contact_no']);
     
+    if (!$userData) {
+        error_log('Error: User data not found in request body');
+        $response = $response->withStatus(400);
+        $response = $response->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode(['error' => 'Invalid request body']));
+        return $response;
+    }
     // Add user to database
     $UserData->addUser($user);
 
     // Create response
-    $responseData = json_encode(['message' => 'User added successfully']);
-    $newResponse = $response->withHeader('Content-Type', 'application/json');
-    $newResponse->getBody()->write($responseData);
-    return $newResponse;
+    $response = $response->withStatus(200);
+    $response = $response->withHeader('Content-Type', 'application/json');
+    $response->getBody()->write(json_encode(['message' => 'User added successfully']));
+    return $response;
 
 });
 

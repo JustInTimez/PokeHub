@@ -32,8 +32,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-// Collect and send user data to API endpoint for backend consumption
-// TODO: Add more form validation checks
+
+// =================================== Collect and send user data to API endpoint for backend consumption =================================== //
+
 const form = document.querySelector("#login-register-form");
 
 const loginButton = document.querySelector(".btn-login");
@@ -69,7 +70,7 @@ registerButton.addEventListener("click", function () {
   const emailInput = document.querySelector("#email");
   const emailRegex = /\S+@\S+\.\S+/;
   const passwordInput = document.querySelector("#password");
-  
+
   if (!emailRegex.test(emailInput.value)) {
     // Display an error message
     alert("Please enter a valid email address.");

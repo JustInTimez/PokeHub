@@ -22,12 +22,12 @@ class UserDAO {
 
     // ====================================== CREATE ================================ //
 
-    public function addUser(User $user) {
+    public function addUser($email, $password) {
         // Add user to the database
         $conn = $this->databaseConfig->connect();
     
         $stmt = $conn->prepare("INSERT INTO trainers (email, password) VALUES (?, ?)");
-        $stmt->bind_param("ss", $user->getEmail(), $user->getPassword());
+        $stmt->bind_param("ss", $email, $password);
     
         $stmt->execute();
         $stmt->close();

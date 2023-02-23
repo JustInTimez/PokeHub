@@ -1,6 +1,5 @@
 <?php
 
-
 // Error Reporting
 
 ini_set('display_errors', 1);
@@ -25,13 +24,7 @@ use Data\PokemonDAO;
 use Data\UserDAO;
 use Config\DatabaseConfig;
 
-
-
 $app = AppFactory::create();
-
-// $app->setBasePath("/public"); // Set the base path to reach index.php
-
-// $app->addRoutingMiddleware();
 
 $errorMiddleware = $app->addErrorMiddleware(true, true, true);
 
@@ -83,6 +76,7 @@ $app->get('/api/all-pokemon', function (Request $request, Response $response, $a
     return $newResponse;
 
 });
+
 
 $app->get('/api/login', function (Request $request, Response $response, $args) {
     $params = $request->getQueryParams();

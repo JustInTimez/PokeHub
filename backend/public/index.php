@@ -89,15 +89,16 @@ $app->get('/api/all-pokemon', function (Request $request, Response $response, $a
 });
 
 
-$app->get('/api/login', function (Request $request, Response $response, $args) {
-    $params = $request->getQueryParams();
-
+$app->post('/api/login', function (Request $request, Response $response, $args) {
+    // Get User data from request body
+    $userData = $request->getParsedBody();
+    
     // Dependencies
     $DatabaseConfig = new DatabaseConfig();
     $UserData = new UserDAO($DatabaseConfig);
 
     // Get User data
-    $user = $UserData->getUserByEmail($params['email']);
+    $user = $UserData->getUserByEmail($userData['email']);
 
     // Set response data
     $responseData = json_encode($user);
@@ -107,7 +108,6 @@ $app->get('/api/login', function (Request $request, Response $response, $args) {
     $newResponse->getBody()->write($responseData);
     return $newResponse;
 });
-
 
 
 // ====== RETURN 404 IF NOT ONE OF THE FOLLOWING: ======

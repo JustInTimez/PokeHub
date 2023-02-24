@@ -69,4 +69,16 @@ class UserDAO {
 
         return $userFromDB;
     }
+
+    public function getUserDetails($id) {
+        $conn = $this->databaseConfig->connect();
+
+        $stmt = $conn->prepare("SELECT * FROM trainers WHERE email = ?");
+        $stmt->bind_param("s", $email);
+
+
+        
+    }
+
+
 }

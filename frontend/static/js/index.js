@@ -3,32 +3,31 @@ import { checkLoggedIn } from "./components/check-login.js";
 
 // Fetch the Pokemon data from API endpoint to display on frontend
 document.addEventListener("DOMContentLoaded", function () {
-  
-    axios
+  axios
     .get("http://localhost/api/all-pokemon")
     .then(function (response) {
       const data = response.data;
       const pokemonList = document.querySelector(".row");
 
-      console.log(response.data);
       data.forEach((pokemon) => {
-        // Use import function from pokemon-card
+        // Use pokemon-card from import function
         let card = createPokemonCard(pokemon);
 
         pokemonList.appendChild(card);
-
-        checkLoggedIn();
-
       });
+
+      // Use check-login from import function
+      checkLoggedIn();
+
     })
     .catch(function (error) {
       console.log(error);
     });
 
-    // User is not logged in, do something else
-    const modal = document.getElementById("login-modal");
-    modal.classList.add("show");
-    modal.style.display = "block";
+  // User is not logged in, do something else
+  const modal = document.getElementById("login-modal");
+  modal.classList.add("show");
+  modal.style.display = "block";
 });
 
 // Show login modal on page load
@@ -46,7 +45,6 @@ const registerButton = document.querySelector(".btn-register");
 const overlay = document.querySelector("#overlay");
 
 loginButton.addEventListener("click", function () {
-
   const emailRegex = /\S+@\S+\.\S+/;
   const passwordInput = document.querySelector("#password");
   const emailInput = document.querySelector("#email");
@@ -73,15 +71,14 @@ loginButton.addEventListener("click", function () {
       },
     })
     .then(function (response) {
-
       // Remove overlay
       overlay.style.display = "none";
 
       // Close the modal
-      const modal = document.querySelector('#login-modal');
-      modal.classList.remove('show');
-      modal.setAttribute('aria-hidden', 'true');
-      modal.setAttribute('style', 'display: none');
+      const modal = document.querySelector("#login-modal");
+      modal.classList.remove("show");
+      modal.setAttribute("aria-hidden", "true");
+      modal.setAttribute("style", "display: none");
 
       // Save user's logged-in state to LocalStorage
       localStorage.setItem("isLoggedIn", true);
@@ -123,10 +120,10 @@ registerButton.addEventListener("click", function () {
       overlay.style.display = "none";
 
       // Close the modal
-      const modal = document.querySelector('#login-modal');
-      modal.classList.remove('show');
-      modal.setAttribute('aria-hidden', 'true');
-      modal.setAttribute('style', 'display: none');
+      const modal = document.querySelector("#login-modal");
+      modal.classList.remove("show");
+      modal.setAttribute("aria-hidden", "true");
+      modal.setAttribute("style", "display: none");
 
       // Save user's logged-in state to LocalStorage
       localStorage.setItem("isLoggedIn", true);

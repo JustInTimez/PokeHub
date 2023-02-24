@@ -57,14 +57,13 @@ $app->post('/api/register', function (Request $request, Response $response, $arg
     }
 
     // Add user to database
-    $UserData->addUser($userData['email'], $userData['password'] );
+    $UserData->addUser($userData['email'], $userData['password']);
 
     // Create response
     $response = $response->withStatus(200);
     $response = $response->withHeader('Content-Type', 'application/json');
     $response->getBody()->write(json_encode(['message' => 'User added successfully']));
     return $response;
-
 });
 
 
@@ -72,7 +71,7 @@ $app->post('/api/register', function (Request $request, Response $response, $arg
 // ====== READ ====== //
 
 $app->get('/api/all-pokemon', function (Request $request, Response $response, $args) {
-    
+
     // Dependencies
     $DatabaseConfig = new DatabaseConfig();
     $PokemonData = new PokemonDAO($DatabaseConfig);
@@ -80,19 +79,34 @@ $app->get('/api/all-pokemon', function (Request $request, Response $response, $a
     // Get Pokemon data & convert to JSON
     $pokemon = $PokemonData->readAllPkm();
     $responseData = json_encode($pokemon);
-    
+
     // Create new Response object with JSON data as the body
     $newResponse = $response->withHeader('Content-Type', 'application/json');
     $newResponse->getBody()->write($responseData);
     return $newResponse;
-
 });
 
+
+$app->get('/api/fetch-a-pokemon/{id}', function (Request $request, Response $response, $args) {
+
+    // Dependencies
+    $DatabaseConfig = new DatabaseConfig();
+    $PokemonData = new PokemonDAO($DatabaseConfig);
+
+    // Get a single Pokemon & convert to JSON
+    $singlePokemon = $PokemonData->readPkmById($args['id']);
+    $responseData = json_encode($singlePokemon);
+
+    // Create new Response object with JSON data as the body
+    $newResponse = $response->withHeader('Content-Type', 'application/json');
+    $newResponse->getBody()->write($responseData);
+    return $newResponse;
+});
 
 $app->post('/api/login', function (Request $request, Response $response, $args) {
     // Get User data from request body
     $userData = $request->getParsedBody();
-    
+
     // Dependencies
     $DatabaseConfig = new DatabaseConfig();
     $UserData = new UserDAO($DatabaseConfig);
@@ -125,7 +139,7 @@ $app->post('/api/login', function (Request $request, Response $response, $args) 
 
 
 // ====== RETURN 404 IF NOT ONE OF THE FOLLOWING: ======
-$app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function($req, $res) use ($app) {
+$app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($req, $res) use ($app) {
     $handler = $this->notFoundHandler; // handle using the default Slim page not found handler
     return $handler($req, $res);
 });

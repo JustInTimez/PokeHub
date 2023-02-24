@@ -1,4 +1,16 @@
+@font-face {
+    font-family: "CustomFont";
+    src: url("../fonts/PokemonGb-RAeo.ttf");
+    src: url("../fonts/PokemonGb-RAeo.ttf") format("woff"),
+        url("../fonts/PokemonGb-RAeo.ttf") format("truetype"),
+}
+
+/* Backup font choice, apply where needed */
+/* font-family: 'Pokemon Solid', sans-serif; */
+
 * {
+    font-family: 'CustomFont', sans-serif;
+    font-size: 20px;
     margin: 0;
     box-sizing: border-box;
 }
@@ -15,6 +27,18 @@
     -moz-animation: fadeIn 2s ease;
     -o-animation: fadeIn 2s ease;
     -ms-animation: fadeIn 2s ease;
+}
+
+.jumbotron-text-bg-blur {
+    margin: auto;
+    height: 380px;
+    padding: 32px;
+    width: 60%;
+    text-align: center;
+    vertical-align: baseline;
+    background-color: rgba(0, 0, 0, .25);
+    -webkit-backdrop-filter: blur(50px);
+    backdrop-filter: blur(5px);
 }
 
 .dropdown-item {
@@ -37,4 +61,127 @@
     background-color: rgba(0, 0, 0, .17);
     -webkit-backdrop-filter: blur(50px);
     backdrop-filter: blur(50px);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* CARD AND MODAL */
+
+/* Card style */
+
+.card {
+    background-color: #f8f8f8;
+    border-radius: 15px;
+    border: 1px solid #d9d9d9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    padding: 20px;
+}
+
+.card:hover {
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+.card-title {
+    font-family: "CustomFont", sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.card-text {
+    font-family: "CustomFont", sans-serif;
+    font-size: 18px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.pokemon-details {
+    width: 100%;
+
+}
+
+.btn-primary {
+    background-color: #cc0000;
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-family: "Pokemon Solid", sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 10px;
+    padding: 10px 20px;
+}
+
+.btn-primary:hover {
+    background-color: #e60000;
+    cursor: pointer;
+}
+
+/* Modal style */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 10000;
+}
+
+.modal-dialog {
+    margin: auto;
+    margin-top: 10%;
+    max-width: 800px;
+}
+
+.modal-content {
+    background-color: #f8f8f8;
+    border-radius: 15px;
+    border: 1px solid #d9d9d9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.modal-title {
+    font-family: "Pokemon Solid", sans-serif;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.modal-body {
+    font-family: "CustomFont", sans-serif;
+    font-size: 24px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.modal-img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 15px;
+}
+
+.modal-img {
+    max-width: 100%;
+    max-height: 250px;
+    margin: auto;
+    display: block;
 }

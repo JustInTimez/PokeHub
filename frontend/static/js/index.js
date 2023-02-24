@@ -1,8 +1,10 @@
 import { createPokemonCard } from "./components/pokemon-card.js";
+import { checkLoggedIn } from "./components/check-login.js";
 
 // Fetch the Pokemon data from API endpoint to display on frontend
 document.addEventListener("DOMContentLoaded", function () {
-  axios
+  
+    axios
     .get("http://localhost/api/all-pokemon")
     .then(function (response) {
       const data = response.data;
@@ -14,11 +16,19 @@ document.addEventListener("DOMContentLoaded", function () {
         let card = createPokemonCard(pokemon);
 
         pokemonList.appendChild(card);
+
+        checkLoggedIn();
+
       });
     })
     .catch(function (error) {
       console.log(error);
     });
+
+    // User is not logged in, do something else
+    const modal = document.getElementById("login-modal");
+    modal.classList.add("show");
+    modal.style.display = "block";
 });
 
 // Show login modal on page load
@@ -37,15 +47,24 @@ const overlay = document.querySelector("#overlay");
 
 loginButton.addEventListener("click", function () {
 
-  const formData = new FormData(form);
-  const data = JSON.stringify(Object.fromEntries(formData)); // convert FormData object to JSON string
+  const emailRegex = /\S+@\S+\.\S+/;
   const passwordInput = document.querySelector("#password");
+  const emailInput = document.querySelector("#email");
+
+  if (!emailRegex.test(emailInput.value)) {
+    // Display an error message
+    alert("Please enter a valid email address.");
+    return;
+  }
 
   if (passwordInput.value.length < 8) {
     // Display an error message
     alert("Password must be at least 8 characters long.");
     return;
   }
+
+  const formData = new FormData(form);
+  const data = JSON.stringify(Object.fromEntries(formData)); // convert FormData object to JSON string
 
   axios
     .post("http://localhost/api/login", data, {
@@ -100,6 +119,18 @@ registerButton.addEventListener("click", function () {
       },
     })
     .then(function (response) {
+      // Remove overlay
+      overlay.style.display = "none";
+
+      // Close the modal
+      const modal = document.querySelector('#login-modal');
+      modal.classList.remove('show');
+      modal.setAttribute('aria-hidden', 'true');
+      modal.setAttribute('style', 'display: none');
+
+      // Save user's logged-in state to LocalStorage
+      localStorage.setItem("isLoggedIn", true);
+
       console.log(response + "AWEEEEEEEEEEEEEEEE!");
     })
     .catch(function (error) {

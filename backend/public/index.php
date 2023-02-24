@@ -100,6 +100,20 @@ $app->post('/api/login', function (Request $request, Response $response, $args) 
     // Get User data
     $user = $UserData->getUserByEmail($userData['email']);
 
+    // Check if user exists
+    if ($user === null) {
+        // User not found
+        $response->getBody()->write(json_encode(["error" => "User not found."]));
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    // Check if password matches
+    if ($user->getPassword() !== $userData['password']) {
+        // Password doesn't match
+        $response->getBody()->write(json_encode(["error" => "Incorrect password."]));
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
     // Set response data
     $responseData = json_encode($user);
 
@@ -111,9 +125,9 @@ $app->post('/api/login', function (Request $request, Response $response, $args) 
 
 
 // ====== RETURN 404 IF NOT ONE OF THE FOLLOWING: ======
-// $app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function($req, $res) use ($app) {
-//     $handler = $this->notFoundHandler; // handle using the default Slim page not found handler
-//     return $handler($req, $res);
-// });
+$app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function($req, $res) use ($app) {
+    $handler = $this->notFoundHandler; // handle using the default Slim page not found handler
+    return $handler($req, $res);
+});
 
 $app->run();

@@ -69,7 +69,4 @@ class UserDAO {
 
         return $userFromDB;
     }
-
-
-
 }

@@ -74,7 +74,7 @@
 
 
 
-/* CARD AND MODAL */
+/* CARD, MODAL, FAV BUTTON */
 
 /* Card style */
 
@@ -184,4 +184,84 @@
     max-height: 250px;
     margin: auto;
     display: block;
+}
+
+.modal-content {
+    font-family: 'Press Start 2P', cursive;
+    background-color: #F5F5F5;
+    border-radius: 10px;
+}
+
+.modal-header {
+    background-color: #EE3D00;
+    color: white;
+    text-align: center;
+    border-bottom: none;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.modal-title {
+    font-size: 30px;
+    margin-top: 10px;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-img {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+    height: auto;
+}
+
+.col-md-4 p {
+    margin: 0;
+    padding: 10px 0;
+    text-align: center;
+    font-size: 18px;
+}
+
+.col-md-4 p:first-of-type {
+    border-bottom: 1px solid #EEE;
+}
+
+.col-md-4 p:last-of-type {
+    border-top: 1px solid #EEE;
+}
+
+.fw-bold {
+    font-weight: bold;
+}
+
+.favorite-btn {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.favorite-btn.favorited img {
+    content: url('../images/icons/pokeballs-48.png');
+}
+
+@media (max-width: 768px) {
+    .col-md-4 p {
+        padding: 5px 0;
+        font-size: 14px;
+    }
+
+    .modal-img {
+        margin-top: 20px;
+    }
+
+    .modal-title {
+        font-size: 24px;
+        margin-top: 20px;
+    }
 }

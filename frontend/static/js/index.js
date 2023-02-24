@@ -37,6 +37,15 @@ document.addEventListener("DOMContentLoaded", function () {
   modal.style.display = "block";
 });
 
+// Add favoritied Pokemons to Trainer(user) profile
+axios.post('/api/favorites', { pokemonId: pokemon.id })
+  .then(response => {
+    // handle success
+  })
+  .catch(error => {
+    // handle error
+  });
+
 // =================================== Collect and send user data to API endpoint for backend consumption =================================== //
 
 const form = document.querySelector("#login-register-form");

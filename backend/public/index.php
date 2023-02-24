@@ -68,6 +68,8 @@ $app->post('/api/register', function (Request $request, Response $response, $arg
 
 
 
+
+
 // ====== READ ====== //
 
 $app->get('/api/all-pokemon', function (Request $request, Response $response, $args) {

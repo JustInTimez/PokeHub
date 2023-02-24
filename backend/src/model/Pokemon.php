@@ -26,7 +26,6 @@ class Pokemon implements \JsonSerializable {
     private $abilities = [];
     private $img;
     
-    
 
     // ================================= Constructor ================================= //
 

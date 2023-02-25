@@ -87,8 +87,6 @@ class Pokemon implements \JsonSerializable {
 
     public function jsonSerialize(): mixed {
 
-        $abilities = json_encode($this->abilities);
-
         return [
             "id" => $this->id,
             "attack" => $this->attack,

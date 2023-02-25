@@ -18,6 +18,24 @@ class PokemonDAO {
         $this->databaseConfig = $databaseConfig;
     }
 
+    // ===================================== CREAT ================================ //
+
+    public function storeFavoritePokemon($userId, $pokemonId) {
+
+        $conn = $this->databaseConfig->connect();
+    
+        $stmt = $conn->prepare("INSERT INTO favorites (id, trainer_id, pokemon_id) VALUES (?, ?, ?)");
+        $stmt->bind_param("iii", $userId, $pokemonId);
+    
+        if (!$stmt->execute()) {
+            $conn->close();
+            throw new \Exception("Failed to store favorite pokemon");
+        }
+    
+        $conn->close();
+    
+    }
+
 
     // ===================================== READ ================================ //
 

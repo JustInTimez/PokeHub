@@ -1,5 +1,6 @@
 function checkLoggedIn() {
     const isLoggedIn = localStorage.getItem("isLoggedIn");
+    const loginState = document.getElementById('log-in-state');
 
     if (isLoggedIn) {
         // User is logged in, do something
@@ -14,12 +15,10 @@ function checkLoggedIn() {
         console.log("User is logged in.");
 
         // Update Menu for logged IN Trainer
-        const loginState = document.getElementById('log-in-state');
         loginState.innerHTML = '<a href="#" onclick="logOut()">Log out</a>';
 
         // Attach click event listener to LogOut link
-        const logInState = document.getElementById('log-in-state');
-        logInState.addEventListener('click', logOut);
+        loginState.addEventListener('click', logOut);
 
         return true;
     } else {
@@ -37,6 +36,7 @@ function checkLoggedIn() {
 
 function logOut() {
     localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('userID');
     window.location.replace("index.html");
 }
 

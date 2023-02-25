@@ -3,7 +3,9 @@ function createPokemonCard(pokemon) {
   card.classList.add("col");
   card.innerHTML = `
     <div class="card h-100")">
-      <img src="${pokemon.img}" class="card-img-top card-img" alt="${pokemon.name}">
+      <img src="${pokemon.img}" class="card-img-top card-img" alt="${
+    pokemon.name
+  }">
       <div class="card-body">
         <h5 class="card-title">${pokemon.name}</h5>
         <p class="card-text">DEX no:${pokemon.pokedex_number}</p>
@@ -34,45 +36,78 @@ function createPokemonCard(pokemon) {
   return card;
 }
 
-function showDetails(pokemon) {
+function showDetails(pokemon, button) {
   // Create a modal to display the details
   const modal = document.createElement("div");
   modal.classList.add("modal");
   modal.innerHTML = `
-    <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">${pokemon.name}</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-lg-4 col-md-12 mb-3">
-            <img src="${pokemon.img}" class="modal-img img-fluid" alt="${
-    pokemon.name
-  }">
-          </div>
-          <div class="col-lg-8 col-md-12">
-            <p><strong>DEX no:</strong> ${pokemon.pokedex_number}</p>
-            <p><strong>Type 1:</strong> ${
-              pokemon.type1
-            } | <strong>Type 2:</strong> ${pokemon.type2}</p>
-            <p><strong>Classification:</strong> ${pokemon.classification}</p>
-            <p><strong>Abilities:</strong> ${pokemon.abilities.join(", ")}</p>
-            <p><strong>Base HP:</strong> ${pokemon.hp}</p>
-            <p><strong>Attack:</strong> ${pokemon.attack}</p>
-            <p><strong>Defense:</strong> ${pokemon.defense}</p>
-            <p><strong>Special Attack:</strong> ${pokemon.special_attack}</p>
-            <p><strong>Special Defense:</strong> ${pokemon.special_defense}</p>
-            <p><strong>Speed:</strong> ${pokemon.speed}</p>
-            <p><strong>Height:</strong> ${pokemon.height_m} m</p>
-            <p><strong>Weight:</strong> ${pokemon.weight_kg} kg</p>
-            <p><strong>Egg Steps:</strong> ${pokemon.base_egg_steps}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+                  <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">${pokemon.name}</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="row gx-3">
+                        <div class="col-md-4 text-center">
+                          <img src="${
+                            pokemon.img
+                          }" class="modal-img" height="200px" width="200px" alt="${pokemon.name}">
+                        </div>
+                        <div class="col-md-8">
+                          <p><span class="fw-bold">DEX no:</span> ${
+                            pokemon.pokedex_number
+                          }</p>
+                          <p><span class="fw-bold">Type:</span> ${
+                            pokemon.type1
+                          } ${pokemon.type1 ? `| ${pokemon.type2}` : ""}</p>
+                          <p><span class="fw-bold">Height:</span> ${
+                            pokemon.height_m
+                          } m</p>
+                          <p><span class="fw-bold">Weight:</span> ${
+                            pokemon.weight_kg
+                          } kg</p>
+                          <p><span class="fw-bold">Abilities:</span> ${pokemon.abilities.join(
+                            ", "
+                          )}</p>
+
+                          <button class="favorite-btn" data-id="${pokemon.id}">
+                            <img src="static/images/icons/pokeballs-50.png">
+                          </button>
+
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row gx-3 d-flex align-self-baseline">
+                        <div class="col-md-4">
+                          <p><span class="fw-bold">Base HP:</span> ${
+                            pokemon.hp
+                          }</p>
+                          <p><span class="fw-bold">Attack:</span> ${
+                            pokemon.attack
+                          }</p>
+                        </div>
+                        <div class="col-md-4">
+                          <p><span class="fw-bold">Defense:</span> ${
+                            pokemon.defense
+                          }</p>
+                          <p><span class="fw-bold">Special Attack:</span> ${
+                            pokemon.sp_attack
+                          }</p>
+                        </div>
+                        <div class="col-md-4">
+                          <p><span class="fw-bold">Speed:</span> ${
+                            pokemon.speed
+                          }</p>
+                          <p><span class="fw-bold">Special Defense:</span> ${
+                            pokemon.sp_defense
+                          }</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
   `;
 
   // Add the modal to the page
@@ -80,7 +115,48 @@ function showDetails(pokemon) {
 
   // Show the modal
   const modalInstance = new bootstrap.Modal(modal);
+
+  const favBtn = modal.querySelector('.favorite-btn');
+  const pokemonId = favBtn.getAttribute('data-id');
+  const userId = localStorage.getItem('UserId');
+
+  if (!userId) {
+    console.log("UserId not found in localStorage");
+    return;
+  }
+
+  const data = {"pokemonId": pokemonId, "userId": userId};
+  
+  favBtn.addEventListener('click', () => {
+    // Send selected pokemon as favorite to backend
+    axios
+      .post("http://localhost/api/favorite/add", data, {
+        headers: {
+          "Content-Type": "application/json",
+        }
+      })
+      .then(function (response) {
+        const favData = response.data;
+  
+        // Run function to save favorite pokemon
+        favBtn.classList.toggle('favorited');
+        let favoritePokemon = localStorage.getItem('favoritePokemon');
+        if (!favoritePokemon) {
+          favoritePokemon = [];
+        } else {
+          favoritePokemon = JSON.parse(favoritePokemon);
+        }
+        favoritePokemon.push(favData.pokemonId);
+        localStorage.setItem('favoritePokemon', JSON.stringify(favoritePokemon));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
+
   modalInstance.show();
 }
+
+
 
 export { createPokemonCard };

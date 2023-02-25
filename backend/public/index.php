@@ -22,6 +22,7 @@ require __DIR__ . '../../vendor/autoload.php';
 use Model\Pokemon;
 use Model\User;
 use Data\PokemonDAO;
+use Data\FavoritesDAO;
 use Data\UserDAO;
 use Config\DatabaseConfig;
 
@@ -67,6 +68,35 @@ $app->post('/api/register', function (Request $request, Response $response, $arg
 });
 
 
+$app->post('/api/favorite/add', function (Request $request, Response $response, $args) {
+    
+    // Dependencies
+    $DatabaseConfig = new DatabaseConfig();
+    $FavoritesData = new FavoritesDAO($DatabaseConfig);
+
+    // Extract favorite data from request body
+    $requestData = $request->getParsedBody();
+
+    if (empty($requestData)) {
+        error_log('Error: User data not found in request body');
+        $response = $response->withStatus(400);
+        $response = $response->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode(['error' => 'Invalid request body']));
+        return $response;
+    }
+    
+    // Add favorited pokemon to DB
+    $FavoritesData->createFavorite($requestData['trainer_id'], $requestData['pokemon_id']);
+
+    // Create response
+    $response = $response->withStatus(200);
+    $response = $response->withHeader('Content-Type', 'application/json');
+    $response->getBody()->write(json_encode(['message' => 'User added successfully']));
+    return $response;
+
+});
+
+
 
 // ====== READ ====== //
 
@@ -85,6 +115,12 @@ $app->get('/api/all-pokemon', function (Request $request, Response $response, $a
     $newResponse->getBody()->write($responseData);
     return $newResponse;
 });
+
+$app->get('/api/favorite/read', function (Request $request, Response $response, $args) {
+
+ 
+});
+
 
 
 $app->get('/api/fetch-a-pokemon/{id}', function (Request $request, Response $response, $args) {
@@ -137,6 +173,13 @@ $app->post('/api/login', function (Request $request, Response $response, $args) 
     return $newResponse;
 });
 
+
+// ====== DELETE ====== //
+
+$app->delete('/api/favorite/delete', function (Request $request, Response $response, $args) {
+
+ 
+});
 
 // ====== RETURN 404 IF NOT ONE OF THE FOLLOWING: ======
 $app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($req, $res) use ($app) {

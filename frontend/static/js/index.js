@@ -37,6 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
   modal.style.display = "block";
 });
 
+
 // =================================== Collect and send user data to API endpoint for backend consumption =================================== //
 
 const form = document.querySelector("#login-register-form");
@@ -80,9 +81,11 @@ loginButton.addEventListener("click", function () {
       modal.setAttribute("aria-hidden", "true");
       modal.setAttribute("style", "display: none");
 
-      // Save user's logged-in state to LocalStorage
+      // Save user's logged-in state and ID to LocalStorage
       localStorage.setItem("isLoggedIn", true);
+      localStorage.setItem("userID", response.data.id);
 
+      checkLoggedIn();
       console.log(response + "AWEEEEEEEEEEEEEEEE!");
     })
     .catch(function (error) {

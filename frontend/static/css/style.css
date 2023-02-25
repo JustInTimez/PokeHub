@@ -15,6 +15,10 @@
     box-sizing: border-box;
 }
 
+a.dropdown-item {
+    text-decoration: none !important;
+}
+
 .jumbotron {
     color: white;
     background-image: url("../images/pika-jumbo1.jpg");

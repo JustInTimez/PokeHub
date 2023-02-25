@@ -37,14 +37,6 @@ document.addEventListener("DOMContentLoaded", function () {
   modal.style.display = "block";
 });
 
-// Add favoritied Pokemons to Trainer(user) profile
-axios.post('/api/favorites', { pokemonId: pokemon.id })
-  .then(response => {
-    // handle success
-  })
-  .catch(error => {
-    // handle error
-  });
 
 // =================================== Collect and send user data to API endpoint for backend consumption =================================== //
 
@@ -89,9 +81,11 @@ loginButton.addEventListener("click", function () {
       modal.setAttribute("aria-hidden", "true");
       modal.setAttribute("style", "display: none");
 
-      // Save user's logged-in state to LocalStorage
+      // Save user's logged-in state and ID to LocalStorage
       localStorage.setItem("isLoggedIn", true);
+      localStorage.setItem("userID", response.data.id);
 
+      checkLoggedIn();
       console.log(response + "AWEEEEEEEEEEEEEEEE!");
     })
     .catch(function (error) {

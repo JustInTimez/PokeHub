@@ -12,9 +12,7 @@ function createPokemonCard(pokemon) {
         <button class="btn btn-primary pokemon-details">View Details</button>
       </div>
       <div class="card-footer">
-        <small class="text-muted">Type: ${
-          pokemon.type1 ? `| ${pokemon.type2}` : ""
-        }</small>
+        <small class="text-muted">Type: ${pokemon.type1}</small>
       </div>
     </div>
   `;
@@ -38,7 +36,7 @@ function createPokemonCard(pokemon) {
   return card;
 }
 
-function showDetails(pokemon) {
+function showDetails(pokemon, button) {
   // Create a modal to display the details
   const modal = document.createElement("div");
   modal.classList.add("modal");
@@ -117,17 +115,48 @@ function showDetails(pokemon) {
 
   // Show the modal
   const modalInstance = new bootstrap.Modal(modal);
+
+  const favBtn = modal.querySelector('.favorite-btn');
+  const pokemonId = favBtn.getAttribute('data-id');
+  const userId = localStorage.getItem('UserId');
+
+  if (!userId) {
+    console.log("UserId not found in localStorage");
+    return;
+  }
+
+  const data = {"pokemonId": pokemonId, "userId": userId};
+  
+  favBtn.addEventListener('click', () => {
+    // Send selected pokemon as favorite to backend
+    axios
+      .post("http://localhost/api/favorite/add", data, {
+        headers: {
+          "Content-Type": "application/json",
+        }
+      })
+      .then(function (response) {
+        const favData = response.data;
+  
+        // Run function to save favorite pokemon
+        favBtn.classList.toggle('favorited');
+        let favoritePokemon = localStorage.getItem('favoritePokemon');
+        if (!favoritePokemon) {
+          favoritePokemon = [];
+        } else {
+          favoritePokemon = JSON.parse(favoritePokemon);
+        }
+        favoritePokemon.push(favData.pokemonId);
+        localStorage.setItem('favoritePokemon', JSON.stringify(favoritePokemon));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
+
   modalInstance.show();
 }
 
-// Favorite Pokemon Button
-const favoriteBtns = document.querySelectorAll('.favorite-btn');
 
-favoriteBtns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    btn.classList.toggle('favorited');
-    localStorage.setItem('favoritePokemon', JSON.stringify(pokemon));
-  });
-});
 
 export { createPokemonCard };

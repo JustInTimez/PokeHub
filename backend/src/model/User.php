@@ -2,7 +2,7 @@
 
 namespace Model;
 
-class User {
+class User implements \JsonSerializable {
 
     // =================================== Fields =================================== //
 
@@ -26,8 +26,19 @@ class User {
         $this->contact_no = $contact_no;
     }
 
+    // ================================= Methods ================================= //
 
+    public function jsonSerialize(): mixed {
 
+        return [
+            "id" => $this->id,
+            "fname" => $this->fname,
+            "lname" => $this->lname,
+            "email" => $this->email,
+            "password" => $this->password,
+            "contact_no" => $this->contact_no
+        ];
+    }
 
     // ============================= Getters and Setters ============================= //
 
@@ -91,4 +102,5 @@ class User {
 
         return $this;
     }
+
 }

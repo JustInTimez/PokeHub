@@ -3,60 +3,62 @@
 namespace Data;
 
 use Config\DatabaseConfig;
+use Model\Favorites;
 
-class FavoritesDAO
-{
+class FavoritesDAO {
     // =================================== Fields =================================== //
 
     private DatabaseConfig $databaseConfig;
 
     // =================================== Constructor ============================== //
 
-    public function __construct(DatabaseConfig $databaseConfig)
-    {
+    public function __construct($databaseConfig) {
         $this->databaseConfig = $databaseConfig;
     }
 
     // ===================================== CREATE ================================= //
 
-    public function storeFavoritePokemon(int $userId, int $pokemonId): void
-    {
+    public function createFavorite($trainerId, $pokemonId) {
+
         $conn = $this->databaseConfig->connect();
-
+    
         $stmt = $conn->prepare("INSERT INTO favorites (trainer_id, pokemon_id) VALUES (?, ?)");
-        $stmt->bind_param("ii", $userId, $pokemonId);
-
-        if (!$stmt->execute()) {
+        $stmt->bind_param("ii", $trainerId, $pokemonId);
+    
+        if ($stmt->execute()) {
+    
             $conn->close();
-            throw new \Exception("Failed to store favorite pokemon");
+    
+            return;
+        } else {
+    
+            $conn->close();
+            throw new \Exception("Unfortunatley, we weren't able to complete the query: " . $conn->error);
         }
-
-        $conn->close();
     }
 
     // ===================================== READ =================================== //
 
-    public function getFavoritePokemonByUserId(int $userId): array
-    {
+
+
+    // ===================================== DELETE =================================== //
+
+    public function removeFavorite($favorites) {
+
         $conn = $this->databaseConfig->connect();
-
-        $stmt = $conn->prepare("SELECT p.* FROM pokemon_data AS p INNER JOIN favorites AS f ON p.id = f.pokemon_id WHERE f.trainer_id = ?");
-        $stmt->bind_param("i", $userId);
-
+    
+        $stmt = $conn->prepare("DELETE FROM favorites WHERE id = ?");
+        $stmt->bind_param("i", $favorites->getId());
+    
         if ($stmt->execute()) {
-            $result = $stmt->get_result();
-            $pokemonList = [];
-
-            while ($row = $result->fetch_object()) {
-                $pokemonList[] = $row;
-            }
-
+    
             $conn->close();
-
-            return $pokemonList;
+            return true;
         } else {
+    
             $conn->close();
-            throw new \Exception("Failed to retrieve favorite pokemon");
+            throw new \Exception("Unfortunatley, we weren't able to complete the query: " . $conn->error);
         }
     }
+
 }

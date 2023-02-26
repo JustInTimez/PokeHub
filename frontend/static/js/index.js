@@ -13,14 +13,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Fetch user's favorites and update icons accordingly
       axios
-        .get("http://localhost/api/fetch-user-favorites")
-        .then(function (response) {
-          favorites = response.data;
-
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+      .get(`http://localhost/api/fetch-user-favorites/${localStorage.getItem("userID")}`)
+      .then(function (response) {
+        favorites = response.data;
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
 
       data.forEach((pokemon) => {
         let card = createPokemonCard(pokemon);

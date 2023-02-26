@@ -32,6 +32,11 @@ $app = AppFactory::create();
 $errorMiddleware = $app->addErrorMiddleware(true, true, true);
 $app->addBodyParsingMiddleware();
 
+$notFoundHandler = function ($request, $response) use ($app) {
+    $response->getBody()->write("Page not found");
+    return $response->withStatus(404);
+};
+
 $app->get('/', function (Request $request, Response $response, $args) {
     $response->getBody()->write("Hello world! I'm working");
     return $response;
@@ -121,7 +126,7 @@ $app->get('/api/all-pokemon', function (Request $request, Response $response, $a
 // });
 
 
-$app->get('/api/fetch-user-favorites', function (Request $request, Response $response, $args) {
+$app->get('/api/fetch-user-favorites/{userID}', function (Request $request, Response $response, $args) {
 
     // Dependencies
     $DatabaseConfig = new DatabaseConfig();
@@ -198,9 +203,9 @@ $app->delete('/api/favorite/delete', function (Request $request, Response $respo
 });
 
 // ====== RETURN 404 IF NOT ONE OF THE FOLLOWING: ======
-$app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($req, $res) use ($app) {
-    $handler = $this->notFoundHandler; // handle using the default Slim page not found handler
-    return $handler($req, $res);
+$app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request, $response) use ($notFoundHandler) {
+    return $notFoundHandler($request, $response);
 });
+
 
 $app->run();

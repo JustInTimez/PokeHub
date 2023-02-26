@@ -136,14 +136,6 @@ function showDetails(pokemon, button) {
         console.log(favData);
         // Run function to save favorite pokemon
         favBtn.classList.toggle('favorited');
-        let favoritePokemon = localStorage.getItem('favoritePokemon');
-        if (!favoritePokemon) {
-          favoritePokemon = [];
-        } else {
-          favoritePokemon = JSON.parse(favoritePokemon);
-        }
-        favoritePokemon.push(favData.pokemonId);
-        localStorage.setItem('favoritePokemon', JSON.stringify(favoritePokemon));
       })
       .catch((error) => {
         console.log(error);

@@ -1,7 +1,9 @@
 import { createPokemonCard } from "./components/pokemon-card.js";
 import { checkLoggedIn } from "./components/check-login.js";
 
-// Fetch the Pokemon data from API endpoint to display on frontend
+
+let favorites = [];
+
 document.addEventListener("DOMContentLoaded", function () {
   axios
     .get("http://localhost/api/all-pokemon")
@@ -9,22 +11,28 @@ document.addEventListener("DOMContentLoaded", function () {
       const data = response.data;
       const pokemonList = document.querySelector(".row");
 
-      data.forEach((pokemon) => {
-        // Use pokemon-card from import function
-        let card = createPokemonCard(pokemon);
+      // Fetch user's favorites and update icons accordingly
+      axios
+        .get("http://localhost/api/fetch-user-favorites")
+        .then(function (response) {
+          favorites = response.data;
 
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+
+      data.forEach((pokemon) => {
+        let card = createPokemonCard(pokemon);
         pokemonList.appendChild(card);
       });
 
-      // Use check-login from import function
       checkLoggedIn();
-
     })
     .catch(function (error) {
       console.log(error);
     });
 
-  // User is not logged in, do something else
   const modal = document.getElementById("login-modal");
   modal.classList.add("show");
   modal.style.display = "block";
@@ -130,6 +138,7 @@ registerButton.addEventListener("click", function () {
 
       // Save user's logged-in state to LocalStorage
       localStorage.setItem("isLoggedIn", true);
+      localStorage.setItem("userID", response.data.id);
 
       console.log(response + "AWEEEEEEEEEEEEEEEE!");
     })

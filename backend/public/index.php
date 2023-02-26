@@ -32,7 +32,6 @@ $app = AppFactory::create();
 $errorMiddleware = $app->addErrorMiddleware(true, true, true);
 $app->addBodyParsingMiddleware();
 
-
 $app->get('/', function (Request $request, Response $response, $args) {
     $response->getBody()->write("Hello world! I'm working");
     return $response;
@@ -84,14 +83,14 @@ $app->post('/api/favorite/add', function (Request $request, Response $response, 
         $response->getBody()->write(json_encode(['error' => 'Invalid request body']));
         return $response;
     }
-    
+
     // Add favorited pokemon to DB
-    $FavoritesData->createFavorite($requestData['trainer_id'], $requestData['pokemon_id']);
+    $FavoritesData->createFavorite($requestData['userId'], $requestData['pokemonId']);
 
     // Create response
     $response = $response->withStatus(200);
     $response = $response->withHeader('Content-Type', 'application/json');
-    $response->getBody()->write(json_encode(['message' => 'User added successfully']));
+    $response->getBody()->write(json_encode(['message' => 'Favorite Pokemon added']));
     return $response;
 
 });
@@ -116,9 +115,26 @@ $app->get('/api/all-pokemon', function (Request $request, Response $response, $a
     return $newResponse;
 });
 
-$app->get('/api/favorite/read', function (Request $request, Response $response, $args) {
+// $app->get('/api/favorite/read', function (Request $request, Response $response, $args) {
 
- 
+
+// });
+
+
+$app->get('/api/fetch-user-favorites', function (Request $request, Response $response, $args) {
+
+    // Dependencies
+    $DatabaseConfig = new DatabaseConfig();
+    $FavoritesData = new FavoritesDAO($DatabaseConfig);
+
+    // Get a single Pokemon & convert to JSON
+    $allFavorites = $FavoritesData->fetchByUserId($args['userID']);
+    $responseData = json_encode($allFavorites);
+
+    // Create new Response object with JSON data as the body
+    $newResponse = $response->withHeader('Content-Type', 'application/json');
+    $newResponse->getBody()->write($responseData);
+    return $newResponse;
 });
 
 

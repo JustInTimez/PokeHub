@@ -52,7 +52,7 @@ class Pokemon implements \JsonSerializable {
         // Decode abilities property if it's a JSON string
        if (is_string($abilities)) {
             $this->abilities = json_decode($abilities, true) ?: [];
-            // var_dump($this->abilities);
+
         } elseif (is_array($abilities)) {
             $this->abilities = $abilities;
         }

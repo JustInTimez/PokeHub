@@ -40,6 +40,8 @@ function showDetails(pokemon, button) {
   // Create a modal to display the details
   const modal = document.createElement("div");
   modal.classList.add("modal");
+
+  
   modal.innerHTML = `
                   <div class="modal-dialog">
                   <div class="modal-content">
@@ -115,15 +117,9 @@ function showDetails(pokemon, button) {
 
   // Show the modal
   const modalInstance = new bootstrap.Modal(modal);
-
   const favBtn = modal.querySelector('.favorite-btn');
   const pokemonId = favBtn.getAttribute('data-id');
-  const userId = localStorage.getItem('UserId');
-
-  if (!userId) {
-    console.log("UserId not found in localStorage");
-    return;
-  }
+  const userId = localStorage.getItem('userID');
 
   const data = {"pokemonId": pokemonId, "userId": userId};
   
@@ -137,7 +133,7 @@ function showDetails(pokemon, button) {
       })
       .then(function (response) {
         const favData = response.data;
-  
+        console.log(favData);
         // Run function to save favorite pokemon
         favBtn.classList.toggle('favorited');
         let favoritePokemon = localStorage.getItem('favoritePokemon');

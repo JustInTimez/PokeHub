@@ -42,20 +42,21 @@ class FavoritesDAO {
     public function fetchByUserId($userID) {
 
         $conn = $this->databaseConfig->connect();
-
+    
         $stmt = $conn->prepare("SELECT * FROM favorites WHERE trainer_id = ?");
         $stmt->bind_param("i", $userID);
     
-        if ($stmt->execute()) {
+        $stmt->execute();
+        $result = $stmt->get_result();
     
-            $conn->close();
-    
-            return;
-        } else {
-    
-            $conn->close();
-            throw new \Exception("Unfortunatley, we weren't able to fetch yo favorites pokemons: " . $conn->error);
+        $favorites = array();
+        while ($row = $result->fetch_assoc()) {
+            $favorites[] = $row;
         }
+    
+        $conn->close();
+    
+        return $favorites;
     }
     
 

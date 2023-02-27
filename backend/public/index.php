@@ -120,20 +120,15 @@ $app->get('/api/all-pokemon', function (Request $request, Response $response, $a
     return $newResponse;
 });
 
-// $app->get('/api/favorite/read', function (Request $request, Response $response, $args) {
 
-
-// });
-
-
-$app->get('/api/fetch-user-favorites/{userID}', function (Request $request, Response $response, $args) {
+$app->get('/api/fetch-user-favorites/{userId}', function (Request $request, Response $response, $args) {
 
     // Dependencies
     $DatabaseConfig = new DatabaseConfig();
     $FavoritesData = new FavoritesDAO($DatabaseConfig);
 
     // Get a single Pokemon & convert to JSON
-    $allFavorites = $FavoritesData->fetchByUserId($args['userID']);
+    $allFavorites = $FavoritesData->fetchByUserId($args['userId']); // fix here
     $responseData = json_encode($allFavorites);
 
     // Create new Response object with JSON data as the body

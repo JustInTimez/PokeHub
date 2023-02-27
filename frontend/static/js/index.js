@@ -1,7 +1,6 @@
 import { createPokemonCard } from "./components/pokemon-card.js";
 import { checkLoggedIn } from "./components/check-login.js";
 
-
 let favorites = [];
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -11,16 +10,6 @@ document.addEventListener("DOMContentLoaded", function () {
       const data = response.data;
       const pokemonList = document.querySelector(".row");
 
-      // Fetch user's favorites and update icons accordingly
-      axios
-      .get(`http://localhost/api/fetch-user-favorites/${localStorage.getItem("userID")}`)
-      .then(function (response) {
-        favorites = response.data;
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-
       data.forEach((pokemon) => {
         let card = createPokemonCard(pokemon);
         pokemonList.appendChild(card);
@@ -29,12 +18,44 @@ document.addEventListener("DOMContentLoaded", function () {
       checkLoggedIn();
     })
     .catch(function (error) {
-      console.log(error);
+      // console.log(error);
     });
 
   const modal = document.getElementById("login-modal");
   modal.classList.add("show");
   modal.style.display = "block";
+
+
+  // Fetch favorite pokemon for the user
+  window.addEventListener('load', function () {
+    // Get user ID from local storage
+    const userId = localStorage.getItem('userID');
+    // console.log(localStorage.getItem("userID"));
+
+    axios.get(`http://localhost/api/fetch-user-favorites/${userId}`)
+      .then(function (response) {
+        favorites = response.data;
+        // console.log(response);
+
+        // Loop through each favorite pokemon and set the state of the favorite button
+        const favoriteButtons = document.querySelectorAll('.favorite-btn');
+        // console.log('favorites:', favorites);
+        // console.log(favoriteButtons);
+        console.log(favoriteButtons);
+        favoriteButtons.forEach((button) => {
+          const pokemonId = button.getAttribute('data-id');
+
+          // console.log(`pokemonId: ${pokemonId}, favorites:`, favorites);
+
+          if (favorites.some((fav) => fav.pokemon_id == pokemonId)) {
+            button.classList.add('favorited');
+          }
+        });
+      })
+      .catch((error) => {
+        // console.log(error);
+      });
+  });
 });
 
 // Show login modal on page load
@@ -43,7 +64,6 @@ document.addEventListener("DOMContentLoaded", function () {
   modal.classList.add("show");
   modal.style.display = "block";
 });
-
 
 // =================================== Collect and send user data to API endpoint for backend consumption =================================== //
 

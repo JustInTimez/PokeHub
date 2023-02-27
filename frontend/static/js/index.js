@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
       checkLoggedIn();
     })
     .catch(function (error) {
-      console.log(error);
+      // console.log(error);
     });
 
   const modal = document.getElementById("login-modal");
@@ -28,26 +28,32 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Fetch favorite pokemon for the user
   window.addEventListener('load', function () {
-
     // Get user ID from local storage
     const userId = localStorage.getItem('userID');
-    console.log(localStorage.getItem("userID"));
+    // console.log(localStorage.getItem("userID"));
 
     axios.get(`http://localhost/api/fetch-user-favorites/${userId}`)
       .then(function (response) {
         favorites = response.data;
-        console.log(response);
+        // console.log(response);
+
         // Loop through each favorite pokemon and set the state of the favorite button
         const favoriteButtons = document.querySelectorAll('.favorite-btn');
+        // console.log('favorites:', favorites);
+        // console.log(favoriteButtons);
+        console.log(favoriteButtons);
         favoriteButtons.forEach((button) => {
           const pokemonId = button.getAttribute('data-id');
-          if (favorites.some((fav) => fav.pokemon_id === pokemonId)) {
+
+          // console.log(`pokemonId: ${pokemonId}, favorites:`, favorites);
+
+          if (favorites.some((fav) => fav.pokemon_id == pokemonId)) {
             button.classList.add('favorited');
           }
         });
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
   });
 });

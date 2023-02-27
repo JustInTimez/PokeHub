@@ -46,15 +46,17 @@ class FavoritesDAO {
         $stmt = $conn->prepare("SELECT * FROM favorites WHERE trainer_id = ?");
         $stmt->bind_param("i", $userID);
     
-        if ($stmt->execute()) {
-            $result = $stmt->get_result();
-            $data = $result->fetch_all(MYSQLI_ASSOC);
-            $conn->close();
-            return $data;
-        } else {
-            $conn->close();
-            throw new \Exception("Unfortunately, we weren't able to fetch your favorite pokemons: " . $conn->error);
+        $stmt->execute();
+        $result = $stmt->get_result();
+    
+        $favorites = array();
+        while ($row = $result->fetch_assoc()) {
+            $favorites[] = $row;
         }
+    
+        $conn->close();
+    
+        return $favorites;
     }
     
 

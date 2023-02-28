@@ -4,6 +4,7 @@ namespace Data;
 
 use Config\DatabaseConfig;
 use Model\Favorites;
+use mysqli;
 
 class FavoritesDAO {
     // =================================== Fields =================================== //
@@ -59,6 +60,28 @@ class FavoritesDAO {
         return $favorites;
     }
     
+    public function checkIfFavorited($userID, $pokemonId) {
+
+        $conn = $this->databaseConfig->connect();
+    
+        $stmt = $conn->prepare("SELECT * FROM favorites WHERE trainer_id = ? AND pokemon_id = ?");
+        $stmt->bind_param("ii", $userID, $pokemonId);
+
+        if (!$stmt->execute()) {
+            error_log("Error executing query: " . $stmt->error);
+            return false;
+        }
+    
+        $stmt->store_result();
+        $isFavorited = $stmt->num_rows == 1;
+
+        $stmt->close();
+        $conn->close();
+    
+        return $isFavorited;
+    }
+
+
 
 
     // ===================================== DELETE =================================== //

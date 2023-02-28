@@ -65,7 +65,7 @@ class PokemonDAO {
 
 
     public function readPkmById($id) {
-
+        // var_dump($id);
         $conn = $this->databaseConfig->connect();
 
         $stmt = $conn->prepare("SELECT * FROM pokemon_data WHERE id = ?");

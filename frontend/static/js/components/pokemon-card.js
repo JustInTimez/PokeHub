@@ -1,11 +1,11 @@
+const userId = localStorage.getItem("userID");
+
 function createPokemonCard(pokemon) {
   const card = document.createElement("div");
   card.classList.add("col");
   card.innerHTML = `
     <div class="card h-100")">
-      <img src="${pokemon.img}" class="card-img-top card-img" alt="${
-    pokemon.name
-  }">
+      <img src="${pokemon.img}" class="card-img-top card-img" alt="${pokemon.name}">
       <div class="card-body">
         <h5 class="card-title">${pokemon.name}</h5>
         <p class="card-text">DEX no:${pokemon.pokedex_number}</p>
@@ -36,13 +36,28 @@ function createPokemonCard(pokemon) {
   return card;
 }
 
-function showDetails(pokemon, button) {
+function showDetails(pokemon) {
   // Create a modal to display the details
   const modal = document.createElement("div");
   modal.classList.add("modal");
 
-  
-  modal.innerHTML = `
+  let favoritedClass = "";
+  let isFavorited = false;
+  // let favData = { pokemonId: pokemon.id, userId: userId };
+
+  axios
+  .get(`http://localhost/api/check-if-favorited?userId=${userId}&pokemonId=${pokemon.id}`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+  .then((response) => {
+    const data = response.data;
+    isFavorited = data;
+    favoritedClass = isFavorited ? "favorited" : "";
+
+
+    modal.innerHTML = `
                   <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
@@ -54,7 +69,9 @@ function showDetails(pokemon, button) {
                         <div class="col-md-4 text-center">
                           <img src="${
                             pokemon.img
-                          }" class="modal-img" height="200px" width="200px" alt="${pokemon.name}">
+                          }" class="modal-img" height="200px" width="200px" alt="${
+    pokemon.name
+  }">
                         </div>
                         <div class="col-md-8">
                           <p><span class="fw-bold">DEX no:</span> ${
@@ -73,7 +90,7 @@ function showDetails(pokemon, button) {
                             ", "
                           )}</p>
 
-                          <button class="favorite-btn" data-id="${pokemon.id}">
+                          <button class="favorite-btn ${favoritedClass}" data-id="${pokemon.id}">
                             <img src="static/images/icons/pokeballs-50.png">
                           </button>
 
@@ -117,25 +134,24 @@ function showDetails(pokemon, button) {
 
   // Show the modal
   const modalInstance = new bootstrap.Modal(modal);
-  const favBtn = modal.querySelector('.favorite-btn');
-  const pokemonId = favBtn.getAttribute('data-id');
-  const userId = localStorage.getItem('userID');
 
-  const data = {"pokemonId": pokemonId, "userId": userId};
-  
-  favBtn.addEventListener('click', () => {
+  const favBtn = modal.querySelector(".favorite-btn");
+  const pokemonId = favBtn.getAttribute("data-id");
+
+  const favData = { pokemonId: pokemonId, userId: userId };
+
+  favBtn.addEventListener("click", () => {
     // Send selected pokemon as favorite to backend
     axios
-      .post("http://localhost/api/favorite/add", data, {
+      .post("http://localhost/api/favorite/add", favData, {
         headers: {
           "Content-Type": "application/json",
-        }
+        },
       })
       .then(function (response) {
-        const favData = response.data;
-        console.log(favData);
+
         // Run function to save favorite pokemon
-        favBtn.classList.toggle('favorited');
+        favBtn.classList.toggle("favorited");
       })
       .catch((error) => {
         console.log(error);
@@ -143,8 +159,14 @@ function showDetails(pokemon, button) {
   });
 
   modalInstance.show();
+
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+  console.log(isFavorited);
+
+  
 }
-
-
 
 export { createPokemonCard };

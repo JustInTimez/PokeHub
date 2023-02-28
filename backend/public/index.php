@@ -128,7 +128,7 @@ $app->get('/api/fetch-user-favorites/{userId}', function (Request $request, Resp
     $FavoritesData = new FavoritesDAO($DatabaseConfig);
 
     // Get a single Pokemon & convert to JSON
-    $allFavorites = $FavoritesData->fetchByUserId($args['userId']); // fix here
+    $allFavorites = $FavoritesData->fetchByUserId($args['userId']);
     $responseData = json_encode($allFavorites);
 
     // Create new Response object with JSON data as the body
@@ -136,6 +136,33 @@ $app->get('/api/fetch-user-favorites/{userId}', function (Request $request, Resp
     $newResponse->getBody()->write($responseData);
     return $newResponse;
 });
+
+$app->get('/api/check-if-favorited', function (Request $request, Response $response, $args) {
+    // Dependencies
+    $DatabaseConfig = new DatabaseConfig();
+    $FavoritesData = new FavoritesDAO($DatabaseConfig);
+
+    $params = $request->getQueryParams();
+    $userId = $params['userId'];
+    $pokemonId = $params['pokemonId'];
+
+    if (empty($userId) || empty($pokemonId)) {
+        error_log('Error: Missing user ID or Pokemon ID');
+        $response = $response->withStatus(400);
+        $response = $response->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode(['error' => 'Missing user ID or Pokemon ID']));
+        return $response;
+    }
+
+    $isFavorited = $FavoritesData->checkIfFavorited($userId, $pokemonId);
+    $responseData = json_encode($isFavorited);
+
+    // Create new Response object with JSON data as the body
+    $newResponse = $response->withHeader('Content-Type', 'application/json');
+    $newResponse->getBody()->write($responseData);
+    return $newResponse;
+});
+
 
 
 

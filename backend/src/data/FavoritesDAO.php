@@ -86,17 +86,18 @@ class FavoritesDAO {
 
     // ===================================== DELETE =================================== //
 
-    public function removeFavorite($favorites) {
+    public function removeFavorite($trainerId, $pokemonId) {
 
         $conn = $this->databaseConfig->connect();
     
-        $stmt = $conn->prepare("DELETE FROM favorites WHERE id = ?");
-        $stmt->bind_param("i", $favorites->getId());
+        $stmt = $conn->prepare("DELETE FROM favorites WHERE trainer_id = ? AND pokemon_id = ?");
+        $stmt->bind_param("ii", $trainerId, $pokemonId);
     
         if ($stmt->execute()) {
     
             $conn->close();
-            return true;
+    
+            return;
         } else {
     
             $conn->close();

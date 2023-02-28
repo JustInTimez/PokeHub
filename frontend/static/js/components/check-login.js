@@ -21,7 +21,7 @@ function checkLoggedIn() {
     // User is not logged in, show login modal
     const modal = document.getElementById("login-modal");
     modal.classList.add("show");
-    modal.style.display = "block";
+    modal.classList.remove("d-none");
     // Update Menu for logged OUT Trainer
     loginState.innerHTML = '<a href="#">Log in</a>';
     return false;

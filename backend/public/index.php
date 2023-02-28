@@ -219,9 +219,32 @@ $app->post('/api/login', function (Request $request, Response $response, $args) 
 
 // ====== DELETE ====== //
 
-$app->delete('/api/favorite/delete', function (Request $request, Response $response, $args) {
+$app->post('/api/favorite/delete', function (Request $request, Response $response, $args) {
 
- 
+    // Dependencies
+    $DatabaseConfig = new DatabaseConfig();
+    $FavoritesData = new FavoritesDAO($DatabaseConfig);
+
+    // Extract favorite data from request body
+    $requestData = $request->getParsedBody();
+
+    if (empty($requestData)) {
+        error_log('Error: User data not found in request body');
+        $response = $response->withStatus(400);
+        $response = $response->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode(['error' => 'Invalid request body']));
+        return $response;
+    }
+
+    // Add favorited pokemon to DB
+    $FavoritesData->removeFavorite($requestData['userId'], $requestData['pokemonId']);
+
+    // Create response
+    $response = $response->withStatus(200);
+    $response = $response->withHeader('Content-Type', 'application/json');
+    $response->getBody()->write(json_encode(['message' => 'Favorite Pokemon added']));
+    return $response;
+
 });
 
 // ====== RETURN 404 IF NOT ONE OF THE FOLLOWING: ======

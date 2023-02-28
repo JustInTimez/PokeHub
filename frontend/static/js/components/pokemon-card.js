@@ -1,4 +1,4 @@
-const userId = localStorage.getItem("userID");
+let userId = localStorage.getItem("userID");
 
 function createPokemonCard(pokemon) {
   const card = document.createElement("div");
@@ -44,6 +44,7 @@ function showDetails(pokemon) {
   let favoritedClass = "";
   let isFavorited = false;
   // let favData = { pokemonId: pokemon.id, userId: userId };
+  userId = localStorage.getItem("userID");
 
   axios
   .get(`http://localhost/api/check-if-favorited?userId=${userId}&pokemonId=${pokemon.id}`, {
@@ -137,13 +138,15 @@ function showDetails(pokemon) {
 
   const favBtn = modal.querySelector(".favorite-btn");
   const pokemonId = favBtn.getAttribute("data-id");
+  userId = localStorage.getItem("userID");
 
   const favData = { pokemonId: pokemonId, userId: userId };
 
   favBtn.addEventListener("click", () => {
+    let requestURL = favBtn.classList.contains("favorited") ? "http://localhost/api/favorite/delete" : "http://localhost/api/favorite/add";
     // Send selected pokemon as favorite to backend
     axios
-      .post("http://localhost/api/favorite/add", favData, {
+      .post(requestURL, favData, {
         headers: {
           "Content-Type": "application/json",
         },

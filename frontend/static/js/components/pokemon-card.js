@@ -43,7 +43,6 @@ function showDetails(pokemon) {
 
   let favoritedClass = "";
   let isFavorited = false;
-  // let favData = { pokemonId: pokemon.id, userId: userId };
   userId = localStorage.getItem("userID");
 
   axios
@@ -127,7 +126,6 @@ function showDetails(pokemon) {
                     </div>
                   </div>
                 </div>
-
   `;
 
   // Add the modal to the page
@@ -163,11 +161,7 @@ function showDetails(pokemon) {
 
   modalInstance.show();
 
-  })
-  .catch((error) => {
-    console.log(error);
   });
-  console.log(isFavorited);
 
   
 }

@@ -5,10 +5,11 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="apple-touch-icon" sizes="180x180" href="TODO" />
-    <link rel="icon" type="image/png" sizes="32x32" href="TODO" />
-    <link rel="icon" type="image/png" sizes="16x16" href="TODO" />
-    <link rel="manifest" href="TODO" />
+    <link rel="apple-touch-icon" sizes="180x180" href="./static/images/favicon/apple-touch-icon.png" />
+    <link rel="icon" type="image/x-icon" href="./static/images/favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="./static/images/favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="./static/images/favicon/favicon-16x16.png" />
+    <link rel="manifest" href="./static/images/favicon/site.webmanifest" />
 
     <title>PokeHub - Gotta Search 'em All!</title>
     <meta name="description" content="Fullstack Site that uses API's to communicate between backend and frontend" />
@@ -21,6 +22,7 @@
     <link rel="stylesheet" href="static/css/style.css">
     <!-- Custom JS -->
     <script src="static/js/index.js" type="module" defer></script>
+    <script src="static/js/components/pagination.js" type="module" defer></script>
     <!-- Axios -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
@@ -70,7 +72,7 @@
         </div>
     </header>
 
-    <h1 class="text-center mt-3 mb-0">Filter PokeDEX</h1>
+    <h1 class="text-center mt-3 mb-0">View PokeDEX</h1>
 
     <!-- Modal -->
     <div class="modal fade d-none" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="login-modal-label"
@@ -104,10 +106,10 @@
     </div>
 
     <!-- Cards: Pokemon List -->
-    <!-- Some JS to loop and display -->
-    <div class="row row-cols-1 row-cols-lg-4 g-5 m-0"></div>
+        <div class="row row-cols-1 row-cols-lg-4 g-5 m-0"></div>
     <!-- Cards: Pokemon List END -->
 
+    <div class="pagination pt-4 justify-content-center"></div>
 
     <!-- Footer -->
     <div class="container">

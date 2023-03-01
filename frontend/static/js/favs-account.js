@@ -1,8 +1,10 @@
 import { createPokemonCard } from "./components/pokemon-card.js";
+import { checkLoggedIn } from "./components/check-login.js";
 
 let favorites = [];
 
 document.addEventListener("DOMContentLoaded", function () {
+  
   // Fetch favorite pokemon for the user
   window.addEventListener("load", function () {
     // Get user ID from local storage
@@ -13,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .then(function (response) {
         favorites = response.data;
         displayFavorites();
+        checkLoggedIn();
       })
       .catch(function (error) {
         console.error(error);
@@ -31,9 +34,11 @@ function displayFavorites() {
         const pokemonData = response.data;
         const card = createPokemonCard(pokemonData);
         pokemonList.appendChild(card);
+
       })
       .catch(function (error) {
         console.error(error);
       });
   }
 }
+

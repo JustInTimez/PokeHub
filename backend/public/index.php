@@ -61,13 +61,13 @@ $app->post('/api/register', function (Request $request, Response $response, $arg
         return $response;
     }
 
-    // Add user to database
-    $UserData->addUser($userData['email'], $userData['password']);
+    // Add user to database and get ID of new user
+    $newUserId = $UserData->addUser($userData['email'], $userData['password']);
 
-    // Create response
+    // Create response with ID of new user
     $response = $response->withStatus(200);
     $response = $response->withHeader('Content-Type', 'application/json');
-    $response->getBody()->write(json_encode(['message' => 'User added successfully']));
+    $response->getBody()->write(json_encode(['message' => 'User added successfully', 'id' => $newUserId]));
     return $response;
 });
 
@@ -110,8 +110,13 @@ $app->get('/api/all-pokemon', function (Request $request, Response $response, $a
     $DatabaseConfig = new DatabaseConfig();
     $PokemonData = new PokemonDAO($DatabaseConfig);
 
+    // Get query parameters for pagination
+    $limit = $request->getQueryParams()['limit'] ?? 20;
+    $page = $request->getQueryParams()['page'] ?? 1;
+    $offset = ($page - 1) * $limit;
+
     // Get Pokemon data & convert to JSON
-    $pokemon = $PokemonData->readAllPkm();
+    $pokemon = $PokemonData->readAllPkm($limit, $offset);
     $responseData = json_encode($pokemon);
 
     // Create new Response object with JSON data as the body
@@ -119,6 +124,12 @@ $app->get('/api/all-pokemon', function (Request $request, Response $response, $a
     $newResponse->getBody()->write($responseData);
     return $newResponse;
 });
+
+
+
+
+
+
 
 
 $app->get('/api/fetch-user-favorites/{userId}', function (Request $request, Response $response, $args) {

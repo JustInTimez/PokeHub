@@ -1,29 +1,66 @@
 import { createPokemonCard } from "./components/pokemon-card.js";
 import { checkLoggedIn } from "./components/check-login.js";
+import { paginate } from "./components/pagination.js";
+import { pages } from "./components/pagination.js";
 
 let favorites = [];
+let currentPage = 1; // initialize currentPage variable
 
 document.addEventListener("DOMContentLoaded", function () {
-  axios
-    .get("http://localhost/api/all-pokemon")
-    .then(function (response) {
-      const data = response.data;
-      const pokemonList = document.querySelector(".row");
+  const limit = 20; // set the limit per page
+  let offset = 0; // set the initial offset
 
-      data.forEach((pokemon) => {
-        let card = createPokemonCard(pokemon);
-        pokemonList.appendChild(card);
+  // define the function to fetch the paginated data
+  const fetchPokemonData = (page) => {
+    offset = (page - 1) * limit; // update offset variable based on current page
+    axios
+      .get(`http://localhost/api/all-pokemon?limit=${limit}&offset=${offset}`)
+      .then(function (response) {
+        const data = response.data;
+        const pokemonList = document.querySelector(".row");
+  
+        pokemonList.innerHTML = ""; // clear the existing list
+  
+        data.forEach((pokemon) => {
+          let card = createPokemonCard(pokemon);
+          pokemonList.appendChild(card);
+        });
+  
+        paginate(pages, '.pagination');
+  
+        checkLoggedIn();
+      })
+      .catch(function (error) {
+        console.log(error);
       });
+  };
 
-      checkLoggedIn();
-    })
-    .catch(function (error) {
-      // console.log(error);
-    });
+  fetchPokemonData(currentPage); // fetch the initial page
+
+  // add event listeners for pagination buttons
+  const prevButton = document.querySelector("#prev-page");
+  const nextButton = document.querySelector("#next-page");
+
+  prevButton.addEventListener("click", () => {
+    if (currentPage > 1) {
+      currentPage--;
+      fetchPokemonData(currentPage); // fetch previous page
+    }
+  });
+  
+  nextButton.addEventListener("click", () => {
+    if (currentPage < pages.length) {
+      currentPage++;
+      fetchPokemonData(currentPage); // fetch next page
+    }
+  });
+    
+  paginate(pages, '.pagination')
 
   const modal = document.getElementById("login-modal");
   modal.classList.add("show");
   modal.style.display = "block";
+  
 });
 
 // Fetch favorite pokemon for the user
@@ -156,6 +193,7 @@ registerButton.addEventListener("click", function () {
       // Save user's logged-in state to LocalStorage
       localStorage.setItem("isLoggedIn", true);
       localStorage.setItem("userID", response.data.id);
+      checkLoggedIn();
 
       console.log(response + "AWEEEEEEEEEEEEEEEE!");
     })

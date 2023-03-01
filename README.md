@@ -11,7 +11,7 @@ Stack used...
 - Frontend:
     - [X] Vanilla JavaScript
     - [X] Bootstrap5
-    - [X] HMTL & CSS
+    - [X] HTML & CSS
 
 ## Description of App
 

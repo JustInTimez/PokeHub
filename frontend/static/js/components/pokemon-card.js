@@ -29,7 +29,7 @@ function createPokemonCard(pokemon) {
         showDetails(data);
       })
       .catch((error) => {
-        console.log(error);
+        alert("Error fetching single Pokemon data from server. Please try again later.");
       });
   });
 
@@ -67,28 +67,14 @@ function showDetails(pokemon) {
                     <div class="modal-body">
                       <div class="row gx-3">
                         <div class="col-md-4 text-center">
-                          <img src="${
-                            pokemon.img
-                          }" class="modal-img" height="200px" width="200px" alt="${
-    pokemon.name
-  }">
+                          <img src="${pokemon.img}" class="modal-img" height="200px" width="200px" alt="${pokemon.name}">
                         </div>
                         <div class="col-md-8">
-                          <p><span class="fw-bold">DEX no:</span> ${
-                            pokemon.pokedex_number
-                          }</p>
-                          <p><span class="fw-bold">Type:</span> ${
-                            pokemon.type1
-                          } ${pokemon.type1 ? `| ${pokemon.type2}` : ""}</p>
-                          <p><span class="fw-bold">Height:</span> ${
-                            pokemon.height_m
-                          } m</p>
-                          <p><span class="fw-bold">Weight:</span> ${
-                            pokemon.weight_kg
-                          } kg</p>
-                          <p><span class="fw-bold">Abilities:</span> ${pokemon.abilities.join(
-                            ", "
-                          )}</p>
+                          <p><span class="fw-bold">DEX no:</span> ${pokemon.pokedex_number}</p>
+                          <p><span class="fw-bold">Type:</span> ${pokemon.type1} ${pokemon.type1 ? `| ${pokemon.type2}` : ""}</p>
+                          <p><span class="fw-bold">Height:</span> ${pokemon.height_m} m</p>
+                          <p><span class="fw-bold">Weight:</span> ${pokemon.weight_kg} kg</p>
+                          <p><span class="fw-bold">Abilities:</span> ${pokemon.abilities.join(", ")}</p>
 
                           <button class="favorite-btn ${favoritedClass}" data-id="${pokemon.id}">
                             <img src="static/images/icons/pokeballs-50.png">
@@ -99,28 +85,16 @@ function showDetails(pokemon) {
                       <hr>
                       <div class="row gx-3 d-flex align-self-baseline">
                         <div class="col-md-4">
-                          <p><span class="fw-bold">Base HP:</span> ${
-                            pokemon.hp
-                          }</p>
-                          <p><span class="fw-bold">Attack:</span> ${
-                            pokemon.attack
-                          }</p>
+                          <p><span class="fw-bold">Base HP:</span> ${pokemon.hp}</p>
+                          <p><span class="fw-bold">Attack:</span> ${pokemon.attack}</p>
                         </div>
                         <div class="col-md-4">
-                          <p><span class="fw-bold">Defense:</span> ${
-                            pokemon.defense
-                          }</p>
-                          <p><span class="fw-bold">Special Attack:</span> ${
-                            pokemon.sp_attack
-                          }</p>
+                          <p><span class="fw-bold">Defense:</span> ${pokemon.defense}</p>
+                          <p><span class="fw-bold">Special Attack:</span> ${pokemon.sp_attack}</p>
                         </div>
                         <div class="col-md-4">
-                          <p><span class="fw-bold">Speed:</span> ${
-                            pokemon.speed
-                          }</p>
-                          <p><span class="fw-bold">Special Defense:</span> ${
-                            pokemon.sp_defense
-                          }</p>
+                          <p><span class="fw-bold">Speed:</span> ${pokemon.speed}</p>
+                          <p><span class="fw-bold">Special Defense:</span> ${pokemon.sp_defense}</p>
                         </div>
                       </div>
                     </div>
@@ -142,6 +116,7 @@ function showDetails(pokemon) {
 
   favBtn.addEventListener("click", () => {
     let requestURL = favBtn.classList.contains("favorited") ? "http://localhost/api/favorite/delete" : "http://localhost/api/favorite/add";
+
     // Send selected pokemon as favorite to backend
     axios
       .post(requestURL, favData, {
@@ -155,15 +130,13 @@ function showDetails(pokemon) {
         favBtn.classList.toggle("favorited");
       })
       .catch((error) => {
-        console.log(error);
+        alert("Error adding or removing favorited Pokemon. Please try again later.");
       });
   });
 
   modalInstance.show();
 
   });
-
-  
 }
 
 export { createPokemonCard };

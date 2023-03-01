@@ -86,13 +86,12 @@ class PokemonDAO {
             $conn->close();
 
             return $pokemon;
+
         } else {
 
             $conn->close();
             throw new \Exception("Unfortunatley, we weren't able to complete the query: " . $conn->error);
         }
     }
-
-
 
 }

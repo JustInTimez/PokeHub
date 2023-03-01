@@ -1,5 +1,4 @@
 import { createPokemonCard } from "./components/pokemon-card.js";
-import { checkLoggedIn } from "./components/check-login.js";
 
 let favorites = [];
 
@@ -7,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
   
   // Fetch favorite pokemon for the user
   window.addEventListener("load", function () {
+
     // Get user ID from local storage
     const userId = localStorage.getItem("userID");
 
@@ -15,10 +15,9 @@ document.addEventListener("DOMContentLoaded", function () {
       .then(function (response) {
         favorites = response.data;
         displayFavorites();
-        checkLoggedIn();
       })
       .catch(function (error) {
-        console.error(error);
+        alert("Error fetching user favorites data from server. Please try again later.");
       });
   });
 });
@@ -37,7 +36,7 @@ function displayFavorites() {
 
       })
       .catch(function (error) {
-        console.error(error);
+        alert("Error displaying single Pokemon data from server. Please try again later.");
       });
   }
 }

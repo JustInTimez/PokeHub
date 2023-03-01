@@ -4,7 +4,7 @@ namespace Model;
 
 class Favorites {
 
-    // =================================== Fields =================================== //
+    // ================================== Fields =================================== //
 
     private $id;
     private $trainer_id;
@@ -18,7 +18,6 @@ class Favorites {
         $this->pokemon_id = $pokemon_id;
 
     }
-
 
 
     // ============================= Getters and Setters ============================= //

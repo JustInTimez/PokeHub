@@ -17,8 +17,7 @@ class UserDAO
 
     // =================================== Constructor ============================== //
 
-    public function __construct($databaseConfig)
-    {
+    public function __construct($databaseConfig) {
         $this->databaseConfig = $databaseConfig;
     }
 
@@ -26,25 +25,26 @@ class UserDAO
 
     // ====================================== CREATE ================================ //
 
-    public function addUser($email, $password)
-    {
+    public function addUser($email, $password) {
         // Add user to the database
         $conn = $this->databaseConfig->connect();
-
+    
         $stmt = $conn->prepare("INSERT INTO trainers (email, password) VALUES (?, ?)");
         $stmt->bind_param("ss", $email, $password);
-
+    
         $stmt->execute();
+        $newUserId = $stmt->insert_id; // get the ID of the newly added user
         $stmt->close();
         $conn->close();
+    
+        return $newUserId;
     }
 
 
 
     // ===================================== READ ================================ //
 
-    public function getUserByEmail($email)
-    {
+    public function getUserByEmail($email) {
         $conn = $this->databaseConfig->connect();
 
         $stmt = $conn->prepare("SELECT * FROM trainers WHERE email = ?");

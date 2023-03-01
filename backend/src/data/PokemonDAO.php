@@ -39,27 +39,27 @@ class PokemonDAO {
 
     // ===================================== READ ================================ //
 
-    public function readAllPkm() {
+    public function readAllPkm($limit, $offset) {
 
         $conn = $this->databaseConfig->connect();
-
+    
         $pokemonFromDB = [];
-
-        $stmt = "SELECT * FROM pokemon_data";
-
+    
+        $stmt = "SELECT * FROM pokemon_data LIMIT $limit OFFSET $offset";
+    
         if ($result = $conn->query($stmt)) {
-
+    
             while ($row = $result->fetch_object()) {
                 $pokemon = Pokemon::readPkmFromDB($row);
                 array_push($pokemonFromDB, $pokemon);
             }
-
+    
             $conn->close();
-
+    
             return $pokemonFromDB;
         } else {
-
-            throw new \Exception("Unfortunatley, we weren't able to complete the query: " . $conn->error);
+    
+            throw new \Exception("Unfortunately, we weren't able to complete the query: " . $conn->error);
         }
     }
 
@@ -86,10 +86,12 @@ class PokemonDAO {
             $conn->close();
 
             return $pokemon;
+
         } else {
 
             $conn->close();
             throw new \Exception("Unfortunatley, we weren't able to complete the query: " . $conn->error);
         }
     }
+
 }

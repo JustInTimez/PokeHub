@@ -7,7 +7,9 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 
-// ---- CORS ----
+// --------------------------------------------------------------------------
+//                                  CORS
+// --------------------------------------------------------------------------
 
 header("Access-Control-Allow-Origin: *");   // allow any origin to access resources on this API
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, PATCH");  // Allow the following HTTP methods on this API
@@ -18,9 +20,10 @@ use Slim\Factory\AppFactory;
 
 require __DIR__ . '../../vendor/autoload.php';
 
-// ---- App requires ----
-use Model\Pokemon;
-use Model\User;
+// --------------------------------------------------------------------------
+//                               APP REQUIRES
+// --------------------------------------------------------------------------
+
 use Data\PokemonDAO;
 use Data\FavoritesDAO;
 use Data\UserDAO;
@@ -42,7 +45,9 @@ $app->get('/', function (Request $request, Response $response, $args) {
     return $response;
 });
 
-// ====== CREATE ====== //
+// --------------------------------------------------------------------------
+//                                CREATE
+// --------------------------------------------------------------------------
 
 $app->post('/api/register', function (Request $request, Response $response, $args) {
 
@@ -61,19 +66,19 @@ $app->post('/api/register', function (Request $request, Response $response, $arg
         return $response;
     }
 
-    // Add user to database
-    $UserData->addUser($userData['email'], $userData['password']);
+    // Add user to database and get ID of new user
+    $newUserId = $UserData->addUser($userData['email'], $userData['password']);
 
-    // Create response
+    // Create response with ID of new user
     $response = $response->withStatus(200);
     $response = $response->withHeader('Content-Type', 'application/json');
-    $response->getBody()->write(json_encode(['message' => 'User added successfully']));
+    $response->getBody()->write(json_encode(['message' => 'User added successfully', 'id' => $newUserId]));
     return $response;
 });
 
 
 $app->post('/api/favorite/add', function (Request $request, Response $response, $args) {
-    
+
     // Dependencies
     $DatabaseConfig = new DatabaseConfig();
     $FavoritesData = new FavoritesDAO($DatabaseConfig);
@@ -97,12 +102,13 @@ $app->post('/api/favorite/add', function (Request $request, Response $response, 
     $response = $response->withHeader('Content-Type', 'application/json');
     $response->getBody()->write(json_encode(['message' => 'Favorite Pokemon added']));
     return $response;
-
 });
 
 
 
-// ====== READ ====== //
+// --------------------------------------------------------------------------
+//                                READ
+// --------------------------------------------------------------------------
 
 $app->get('/api/all-pokemon', function (Request $request, Response $response, $args) {
 
@@ -110,8 +116,13 @@ $app->get('/api/all-pokemon', function (Request $request, Response $response, $a
     $DatabaseConfig = new DatabaseConfig();
     $PokemonData = new PokemonDAO($DatabaseConfig);
 
+    // Get query parameters for pagination
+    $limit = $request->getQueryParams()['limit'] ?? 20;
+    $page = $request->getQueryParams()['page'] ?? 1;
+    $offset = ($page - 1) * $limit;
+
     // Get Pokemon data & convert to JSON
-    $pokemon = $PokemonData->readAllPkm();
+    $pokemon = $PokemonData->readAllPkm($limit, $offset);
     $responseData = json_encode($pokemon);
 
     // Create new Response object with JSON data as the body
@@ -162,8 +173,6 @@ $app->get('/api/check-if-favorited', function (Request $request, Response $respo
     $newResponse->getBody()->write($responseData);
     return $newResponse;
 });
-
-
 
 
 $app->get('/api/fetch-a-pokemon/{id}', function (Request $request, Response $response, $args) {
@@ -217,7 +226,9 @@ $app->post('/api/login', function (Request $request, Response $response, $args) 
 });
 
 
-// ====== DELETE ====== //
+// --------------------------------------------------------------------------
+//                                 DELETE
+// --------------------------------------------------------------------------
 
 $app->post('/api/favorite/delete', function (Request $request, Response $response, $args) {
 
@@ -244,10 +255,12 @@ $app->post('/api/favorite/delete', function (Request $request, Response $respons
     $response = $response->withHeader('Content-Type', 'application/json');
     $response->getBody()->write(json_encode(['message' => 'Favorite Pokemon added']));
     return $response;
-
 });
 
-// ====== RETURN 404 IF NOT ONE OF THE FOLLOWING: ======
+// --------------------------------------------------------------------------
+//                  RETURN 404 IF NOT ONE OF THE FOLLOWING:
+// --------------------------------------------------------------------------
+
 $app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request, $response) use ($notFoundHandler) {
     return $notFoundHandler($request, $response);
 });

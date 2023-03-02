@@ -20,7 +20,7 @@ __All communication between frontend and backend is done through the use of Axio
 From there, DAO namespaces and model classes were created in PHP in order to facilitate the connection to the MySQL database and interact with the respective tables.
 
 - [X] Login/Register modal for auth (GET/POST, with LocalStorage used for userID and LoggedIn status)
-- [X] Fetch all Pokemon from the database when landing on the homepage (GET)
+- [X] Fetch all Pokemon / Filter them from the database when landing on the homepage (GET)
 - [X] Fetch individual Pokemon stats from the database when viewing details (GET)
 - [X] Add/Remove Pokemon from user favorites using API endpoints (GET/POST & stateful)
 

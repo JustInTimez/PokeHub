@@ -39,13 +39,19 @@ class PokemonDAO {
 
     // ===================================== READ ================================ //
 
-    public function readAllPkm($limit, $offset) {
+    public function readAllPkm($limit, $offset, $legendaryFilter) {
 
         $conn = $this->databaseConfig->connect();
     
         $pokemonFromDB = [];
     
-        $stmt = "SELECT * FROM pokemon_data LIMIT $limit OFFSET $offset";
+        $stmt = "SELECT * FROM pokemon_data";
+    
+        if ($legendaryFilter) {
+            $stmt .= " WHERE is_legendary = 1";
+        }
+    
+        $stmt .= " LIMIT $limit OFFSET $offset";
     
         if ($result = $conn->query($stmt)) {
     
@@ -62,10 +68,11 @@ class PokemonDAO {
             throw new \Exception("Unfortunately, we weren't able to complete the query: " . $conn->error);
         }
     }
+    
 
 
     public function readPkmById($id) {
-        // var_dump($id);
+
         $conn = $this->databaseConfig->connect();
 
         $stmt = $conn->prepare("SELECT * FROM pokemon_data WHERE id = ?");

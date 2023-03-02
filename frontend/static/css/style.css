@@ -106,16 +106,25 @@ a.dropdown-item {
 
 }
 
+.login-button {
+    background-color: #cc0000;
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-family: "CustomFont", sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 10px;
+    padding: 10px 20px;
+}
+
 .btn-primary {
     background-color: #cc0000;
     border: none;
     border-radius: 10px;
     color: #fff;
-    font-family: "Pokemon Solid", sans-serif;
-    font-size: 24px;
+    font-family: "CustomFont", sans-serif;
     font-weight: bold;
-    margin-top: 10px;
-    padding: 10px 20px;
 }
 
 .btn-primary:hover {
@@ -242,6 +251,31 @@ a.dropdown-item {
 
 .favorite-btn.favorited img {
     content: url('../images/icons/pokeballs-48.png');
+}
+
+/* FILTER BUTTONS */
+
+.legendary-filter-button {
+    font-family: "CustomFont", sans-serif;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease-in-out;
+    display: block;
+    margin: 0 auto;
+}
+
+.legendary-filter-button:hover {
+    background-color: #d32f2f;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 @media (max-width: 768px) {

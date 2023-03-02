@@ -28,7 +28,7 @@ I am still busy/wanting to implement:
 - [ ] Pagination - this is in progress, and is isolated - does not break the core functionality of the app.
 - [ ] Filtering options:
     - [ ] Filter by type (Fire, Grass, Normal, Flying etc...)
-    - [ ] Filter by Legendary status
+    - [X] Filter by Legendary status - **Completed!**
     - [ ] Search capabilities - search result by typing the Pokemon name
 - [ ] Intentionally left out some Pokemon - the focus was on Gen 1 Pokemon only. I would like to build out functionality that allows the user to add any missing pokemon to the DEX!
 

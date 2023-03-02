@@ -20,7 +20,7 @@ __All communication between frontend and backend is done through the use of Axio
 From there, DAO namespaces and model classes were created in PHP in order to facilitate the connection to the MySQL database and interact with the respective tables.
 
 - [X] Login/Register modal for auth (GET/POST, with LocalStorage used for userID and LoggedIn status)
-- [X] Fetch all Pokemon from the database when landing on the homepage (GET)
+- [X] Fetch all Pokemon / Filter them from the database when landing on the homepage (GET)
 - [X] Fetch individual Pokemon stats from the database when viewing details (GET)
 - [X] Add/Remove Pokemon from user favorites using API endpoints (GET/POST & stateful)
 
@@ -28,7 +28,7 @@ I am still busy/wanting to implement:
 - [ ] Pagination - this is in progress, and is isolated - does not break the core functionality of the app.
 - [ ] Filtering options:
     - [ ] Filter by type (Fire, Grass, Normal, Flying etc...)
-    - [ ] Filter by Legendary status
+    - [X] Filter by Legendary status - **Completed!**
     - [ ] Search capabilities - search result by typing the Pokemon name
 - [ ] Intentionally left out some Pokemon - the focus was on Gen 1 Pokemon only. I would like to build out functionality that allows the user to add any missing pokemon to the DEX!
 

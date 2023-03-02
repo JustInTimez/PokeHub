@@ -8,7 +8,7 @@ let currentPage = 1; // initialize currentPage variable for pagination
 
 const typedTextSpan = document.querySelector(".typed-text");
 const cursorSpan = document.querySelector(".cursor");
-const textArray = ["Welcome, Trainers!", "Wanna be the very best!"];
+const textArray = ["Welcome, Trainers!", "Wanna be the very best?"];
 const typingDelay = 100;
 const erasingDelay = 60;
 const newTextDelay = 700;      // Delay between current and next text
@@ -49,35 +49,44 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-
 document.addEventListener("DOMContentLoaded", function () {
   const limit = 20; // set the limit per page (pagination)
   let offset = 0; // set the initial offset (pagination)
+  let legendaryFilter = false; // initial state of filter
 
   // define the function to fetch the paginated data
-  const fetchPokemonData = (page) => {
-    offset = (page - 1) * limit; // update offset variable based on current page
+  const fetchPokemonData = (page, legendaryFilter) => {
+    offset = (page - 1) * limit;
+    let url = `http://localhost/api/all-pokemon?limit=${limit}&offset=${offset}`;
+    if (legendaryFilter) {
+      url += '&legendary=1';
+    }
     axios
-      .get(`http://localhost/api/all-pokemon?limit=${limit}&offset=${offset}`)
+      .get(url)
       .then(function (response) {
         const data = response.data;
         const pokemonList = document.querySelector(".row");
-  
-        pokemonList.innerHTML = ""; // clear the existing list
-  
+        pokemonList.innerHTML = "";
         data.forEach((pokemon) => {
           let card = createPokemonCard(pokemon);
           pokemonList.appendChild(card);
+
+        
         });
-  
         paginate(pages, '.pagination');
-  
         checkLoggedIn();
+        
       })
       .catch(function (error) {
         alert("Error fetching data from server. Please try again later.");
       });
+      const toggleLegendaryButton = document.querySelector("#toggle-legendary");
+      toggleLegendaryButton.addEventListener("click", () => {
+        legendaryFilter = !legendaryFilter; // toggle filter state
+        fetchPokemonData(currentPage, legendaryFilter); // fetch data with filter
+      });
   };
+  
 
   fetchPokemonData(currentPage); // fetch the initial page
 

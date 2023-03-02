@@ -116,13 +116,14 @@ $app->get('/api/all-pokemon', function (Request $request, Response $response, $a
     $DatabaseConfig = new DatabaseConfig();
     $PokemonData = new PokemonDAO($DatabaseConfig);
 
-    // Get query parameters for pagination
+    // Get query parameters for pagination and filtering
     $limit = $request->getQueryParams()['limit'] ?? 20;
     $page = $request->getQueryParams()['page'] ?? 1;
     $offset = ($page - 1) * $limit;
+    $legendary = $request->getQueryParams()['legendary'] ?? null;
 
     // Get Pokemon data & convert to JSON
-    $pokemon = $PokemonData->readAllPkm($limit, $offset);
+    $pokemon = $PokemonData->readAllPkm($limit, $offset, $legendary);
     $responseData = json_encode($pokemon);
 
     // Create new Response object with JSON data as the body

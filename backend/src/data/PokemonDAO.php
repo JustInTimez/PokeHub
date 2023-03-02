@@ -39,35 +39,41 @@ class PokemonDAO {
 
     // ===================================== READ ================================ //
 
-    public function readAllPkm($limit, $offset, $legendaryFilter) {
-
+    public function readAllPkm($limit, $offset, $legendaryFilter, $typeFilter) {
         $conn = $this->databaseConfig->connect();
-    
         $pokemonFromDB = [];
-    
         $stmt = "SELECT * FROM pokemon_data";
-    
-        if ($legendaryFilter) {
-            $stmt .= " WHERE is_legendary = 1";
+        
+        if ($legendaryFilter || $typeFilter) {
+            $stmt .= " WHERE ";
+            
+            if ($legendaryFilter) {
+                $stmt .= "is_legendary = 1";
+                
+                if ($typeFilter) {
+                    $stmt .= " AND ";
+                }
+            }
+            
+            if ($typeFilter) {
+                $stmt .= "type1 = '$typeFilter' OR type2 = '$typeFilter'";
+            }
         }
-    
+        
         $stmt .= " LIMIT $limit OFFSET $offset";
-    
+        
         if ($result = $conn->query($stmt)) {
-    
             while ($row = $result->fetch_object()) {
                 $pokemon = Pokemon::readPkmFromDB($row);
                 array_push($pokemonFromDB, $pokemon);
             }
-    
             $conn->close();
-    
             return $pokemonFromDB;
         } else {
-    
             throw new \Exception("Unfortunately, we weren't able to complete the query: " . $conn->error);
         }
     }
+    
     
 
 

@@ -50,42 +50,62 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 document.addEventListener("DOMContentLoaded", function () {
-  const limit = 20; // set the limit per page (pagination)
-  let offset = 0; // set the initial offset (pagination)
-  let legendaryFilter = false; // initial state of filter
 
-  // define the function to fetch the paginated data
-  const fetchPokemonData = (page, legendaryFilter) => {
-    offset = (page - 1) * limit;
-    let url = `http://localhost/api/all-pokemon?limit=${limit}&offset=${offset}`;
-    if (legendaryFilter) {
-      url += '&legendary=1';
-    }
-    axios
-      .get(url)
-      .then(function (response) {
-        const data = response.data;
-        const pokemonList = document.querySelector(".row");
-        pokemonList.innerHTML = "";
-        data.forEach((pokemon) => {
-          let card = createPokemonCard(pokemon);
-          pokemonList.appendChild(card);
+const limit = 20; // set the limit per page (pagination)
+let offset = 0; // set the initial offset (pagination)
+let legendaryFilter = false; // initial state of filter
+let typeFilter = ""; // initial state of filter
 
-        
+// define the function to fetch the paginated data
+const fetchPokemonData = (page, legendaryFilter) => {
+  offset = (page - 1) * limit;
+  let url = `http://localhost/api/all-pokemon?limit=${limit}&offset=${offset}`;
+  if (legendaryFilter) {
+    url += "&legendary=1";
+  }
+  if (typeFilter) {
+    url += `&type=${typeFilter}`;
+  }
+  axios
+    .get(url)
+    .then(function (response) {
+      const data = response.data;
+      const pokemonList = document.querySelector(".row");
+      pokemonList.innerHTML = "";
+      data.forEach((pokemon) => {
+        let card = createPokemonCard(pokemon);
+        pokemonList.appendChild(card);
+      });
+      paginate(pages, ".pagination");
+      checkLoggedIn();
+
+      // add event listeners to filter buttons
+      const allButton = document.querySelector('.type-filter-button[data-type=""]');
+      allButton.addEventListener("click", () => {
+        typeFilter = "";
+        fetchPokemonData(currentPage, legendaryFilter);
+      });
+
+      const legendaryButton = document.getElementById("toggle-legendary");
+      legendaryButton.addEventListener("click", () => {
+        legendaryFilter = !legendaryFilter;
+        fetchPokemonData(currentPage, legendaryFilter);
+      });
+
+      const typeFilterButtons = document.querySelectorAll(".type-filter-button:not([data-type=''])");
+      typeFilterButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          typeFilter = button.getAttribute("data-type");
+          fetchPokemonData(currentPage, legendaryFilter);
         });
-        paginate(pages, '.pagination');
-        checkLoggedIn();
-        
-      })
-      .catch(function (error) {
-        alert("Error fetching data from server. Please try again later.");
       });
-      const toggleLegendaryButton = document.querySelector("#toggle-legendary");
-      toggleLegendaryButton.addEventListener("click", () => {
-        legendaryFilter = !legendaryFilter; // toggle filter state
-        fetchPokemonData(currentPage, legendaryFilter); // fetch data with filter
-      });
-  };
+    })
+    .catch(function (error) {
+      alert("Error fetching data from server. Please try again later.");
+    });
+};
+
+
   
 
   fetchPokemonData(currentPage); // fetch the initial page

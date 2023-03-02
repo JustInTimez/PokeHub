@@ -72,10 +72,25 @@
         </div>
     </header>
 
-    <h1 class="text-center mt-3 mb-0">View PokeDEX</h1>
+    <h1 class="text-center mt-3 mb-0">Filter PokeDEX</h1>
 
     <!-- Filter: Legendary Pokemon -->
     <button id="toggle-legendary" class="legendary-filter-button mt-3">Filter: Legendary</button>
+
+    <!-- Filter: Pokemon Type -->
+    <div class="d-flex justify-content-center my-4">
+        <button class="type-filter-button btn mx-2" type="button" data-type="">All</button>
+        <button class="type-filter-button btn mx-2" type="button" data-type="Normal" style="background-color: #A8A77A;">Normal</button>
+        <button class="type-filter-button btn mx-2" type="button" data-type="Grass" style="background-color: #7AC74C;">Grass</button>
+        <button class="type-filter-button btn mx-2" type="button" data-type="Fire" style="background-color: #EE8130;">Fire</button>
+        <button class="type-filter-button btn mx-2" type="button" data-type="Water" style="background-color: #6390F0;">Water</button>
+        <button class="type-filter-button btn mx-2" type="button" data-type="Electric" style="background-color: #F7D02C;">Electric</button>
+        <button class="type-filter-button btn mx-2" type="button" data-type="Rock" style="background-color: #B6A136;">Rock</button>
+        <button class="type-filter-button btn mx-2" type="button" data-type="Ice" style="background-color: #96D9D6;">Ice</button>
+        <button class="type-filter-button btn mx-2" type="button" data-type="Dragon" style="background-color: #6F35FC;">Dragon</button>
+        <button class="type-filter-button btn mx-2" type="button" data-type="Psychic" style="background-color: #F95587;">Psychic</button>
+    </div>
+  
 
     <!-- Modal -->
     <div class="modal fade d-none" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="login-modal-label"

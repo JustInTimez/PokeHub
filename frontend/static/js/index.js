@@ -108,31 +108,31 @@ const fetchPokemonData = (page, legendaryFilter) => {
 
   
 
-  fetchPokemonData(currentPage); // fetch the initial page
+fetchPokemonData(currentPage); // fetch the initial page
 
-  // add event listeners for pagination buttons
-  const prevButton = document.querySelector("#prev-page");
-  const nextButton = document.querySelector("#next-page");
+// add event listeners for pagination buttons
+const prevButton = document.querySelector("#prev-page");
+const nextButton = document.querySelector("#next-page");
 
-  prevButton.addEventListener("click", () => {
-    if (currentPage > 1) {
-      currentPage--;
-      fetchPokemonData(currentPage); // fetch previous page
-    }
-  });
+prevButton.addEventListener("click", () => {
+  if (currentPage > 1) {
+    currentPage--;
+    fetchPokemonData(currentPage); // fetch previous page
+  }
+});
+
+nextButton.addEventListener("click", () => {
+  if (currentPage < pages.length) {
+    currentPage++;
+    fetchPokemonData(currentPage); // fetch next page
+  }
+});
   
-  nextButton.addEventListener("click", () => {
-    if (currentPage < pages.length) {
-      currentPage++;
-      fetchPokemonData(currentPage); // fetch next page
-    }
-  });
-    
-  paginate(pages, '.pagination')
+paginate(pages, '.pagination')
 
-  const modal = document.getElementById("login-modal");
-  modal.classList.add("show");
-  modal.style.display = "block";
+const modal = document.getElementById("login-modal");
+modal.classList.add("show");
+modal.style.display = "block";
   
 });
 

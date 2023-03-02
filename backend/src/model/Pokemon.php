@@ -29,7 +29,9 @@ class Pokemon implements \JsonSerializable {
 
     // ================================= Constructor ================================= //
 
-    public function __construct($id, $attack, $base_egg_steps, $classification, $defense, $height_m, $hp, $name, $pokedex_number, $sp_attack, $sp_defense, $speed, $type1, $type2, $weight_kg, $is_legendary, $abilities, $img) {
+    public function __construct($id, $attack, $base_egg_steps, $classification, $defense, $height_m, $hp, $name, 
+        $pokedex_number, $sp_attack, $sp_defense, $speed, $type1, $type2, $weight_kg, $is_legendary, $abilities, $img) {
+            
         $this->id = $id;
         $this->attack = $attack;
         $this->base_egg_steps = $base_egg_steps;
